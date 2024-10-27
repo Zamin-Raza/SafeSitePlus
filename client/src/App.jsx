@@ -7,11 +7,15 @@ import { useMemo } from "react";
 
 import Layout from "@scenes/layout";
 import Dashboard from "@scenes/dashboard";
+import Addsupervisor from "@scenes/Addsupervisor";
+import AuditLogging from "@scenes/AuditLogging";
+import Login from "@scenes/Login";
+
+
 // client
 import Products from "@scenes/products";
 import Customers from "@scenes/customers";
-import Transactions from "@scenes/transactions";
-import Geography from "@scenes/geography";
+
 
 // sales
 import Overview from "@scenes/overview";
@@ -22,6 +26,9 @@ import Breakdown from "@scenes/breakdown";
 // management
 import Admin from "@scenes/admin";
 import Performance from "@scenes/performance";
+import Weather from "@scenes/Weather";
+import Forgot1 from "./components/Forget1"
+import Forgot2 from "./components/Forget2"
 
 import "./App.css";
 
@@ -38,18 +45,28 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/auditlogging" element={<AuditLogging />} />
+              <Route path="/addsupervisor" element={<Addsupervisor />} />
+              <Route path="/weatherdetails" element={<Weather/>} />
+              <Route path="/login" element={<Login/>} />
+              <Route path="/Forget" element={<Forgot1/>} />
+              <Route path="/recoverpassword/:id/:token" element={<Forgot1/>} />
+              
+          
+             
+              
 
               {/*  client */}
-              <Route path="/products" element={<Products />} />
+              {/* <Route path="/products" element={<Products />} />
               <Route path="/customers" element={<Customers />} />
               <Route path="/transactions" element={<Transactions />} />
-              <Route path="/geography" element={<Geography />} />
+              <Route path="/geography" element={<Geography />} /> */}
 
               {/* sales */}
-              <Route path="/overview" element={<Overview />} />
+              {/* <Route path="/overview" element={<Overview />} />
               <Route path="/daily" element={<Daily />} />
               <Route path="/monthly" element={<Monthly />} />
-              <Route path="/breakdown" element={<Breakdown />} />
+              <Route path="/breakdown" element={<Breakdown />} /> */}
 
               {/* management */}
               <Route path="/admin" element={<Admin />} />

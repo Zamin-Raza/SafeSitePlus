@@ -10,6 +10,12 @@ import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
+import weatherRoutes from "./routes/Weather.js";
+import supervisorRoutes from "./routes/Supervisor.js";
+import loginRoutes from "./routes/loginRoutes.js";
+
+
+
 
 /*  Data imports  */
 import User from "./models/User.js";
@@ -43,6 +49,9 @@ app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
+app.use("/weather", weatherRoutes);
+app.use("/supervisor", supervisorRoutes);
+app.use("/login",loginRoutes );
 
 /* Mongoose setup */
 const PORT = process.env.PORT || 9000;

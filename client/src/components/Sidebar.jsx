@@ -30,6 +30,14 @@ import {
   AdminPanelSettingsOutlined,
   TrendingUpOutlined,
   PieChartOutlined,
+  GroupAddOutlined,
+  NotificationImportant,
+  DetailsOutlined,
+  Details,
+  CameraAlt,
+  CameraEnhance,
+  EditAttributes,
+  MenuBook,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@assets/profile.jpg";
@@ -41,20 +49,36 @@ const navItems = [
   },
 
   {
-    text: "Client Facing",
+    text: "User Management",
     icon: null,
   },
   {
-    text: "Products",
-    icon: <ShoppingCartOutlined />,
+    text: "view Notifications",
+    icon: <NotificationImportant />,
   },
   {
-    text: "Customers",
-    icon: <Groups2Outlined />,
+    text: "AddSupervisor",
+    icon: <GroupAddOutlined />,
   },
   {
-    text: "Transactions",
+    text: "AuditLogging",
+    icon: <Details/>,
+  },
+  {
+    text: "Camera Details",
+    icon: <CameraEnhance />,
+  },
+  {
+    text: "WeatherDetails",
     icon: <ReceiptLongOutlined />,
+  },
+  {
+    text: "Customize Interface",
+    icon: <EditAttributes/>,
+  },
+  {
+    text: "System Configuration",
+    icon: <MenuBook/>,
   },
   {
     text: "Geography",
@@ -130,11 +154,11 @@ const Sidebar = ({
           }}
         >
           <Box width="100%">
-            <Box m="1.5rem 2rem 2rem 3rem">
+            <Box m="1.5rem 1rem 2rem 3rem">
               <FlexBetween>
                 <Box display="flex" alignItems="center" gap="0.5rem">
                   <Typography variant="h4" fontWeight="bold">
-                    ECOM
+                    Safe Site Plus
                   </Typography>
                 </Box>
                 {!isNonMobile && (
@@ -154,7 +178,7 @@ const Sidebar = ({
                   );
                 }
 
-                const lcText = text.toLowerCase();
+                const lcText = text.toLowerCase(); //jo text click ho ga
 
                 return (
                   <ListItem key={text} disablePadding>
