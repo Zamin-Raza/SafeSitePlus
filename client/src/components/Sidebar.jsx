@@ -38,6 +38,7 @@ import {
   CameraEnhance,
   EditAttributes,
   MenuBook,
+  AppRegistration,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@assets/profile.jpg";
@@ -101,8 +102,8 @@ const navItems = [
     icon: <CalendarMonthOutlined />,
   },
   {
-    text: "Breakdown",
-    icon: <PieChartOutlined />,
+    text: "RegisterSite",
+    icon: <AppRegistration />,
   },
 
   {

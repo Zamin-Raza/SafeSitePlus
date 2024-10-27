@@ -10,6 +10,7 @@ import Dashboard from "@scenes/dashboard";
 import Addsupervisor from "@scenes/Addsupervisor";
 import AuditLogging from "@scenes/AuditLogging";
 import Login from "@scenes/Login";
+import RegisterSite from "@scenes/RegisterSite";
 
 
 // client
@@ -51,6 +52,7 @@ function App() {
               <Route path="/login" element={<Login/>} />
               <Route path="/Forget" element={<Forgot1/>} />
               <Route path="/recoverpassword/:id/:token" element={<Forgot1/>} />
+              <Route path="/registersite" element={<RegisterSite/>} />
               
           
              
