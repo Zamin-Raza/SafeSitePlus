@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Grid, Card, CardContent } from '@mui/material';
+import { Container, TextField, Button, Typography, Grid, Card, CardContent, Select , MenuItem } from '@mui/material';
+import axios from 'axios';
+
 
 const RegisterSite = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +9,7 @@ const RegisterSite = () => {
     siteName: '',
     address: '',
     city: '',
+    Sensitivity: 'Low',
     lat: '',
     long: '',
   });
@@ -25,18 +28,30 @@ const RegisterSite = () => {
     if (!formData.siteId) newErrors.siteId = 'Site ID is required';
     if (!formData.siteName) newErrors.siteName = 'Site Name is required';
     if (!formData.address) newErrors.address = 'Address is required';
-    if (!formData.lat) newErrors.lat = 'Latitude is required';
-    if (!formData.long) newErrors.long = 'Longitude is required';
+    // if (!formData.lat) newErrors.lat = 'Latitude is required';
+    // if (!formData.long) newErrors.long = 'Longitude is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
+    console.log('Form Data:', formData.Sensitivity);
     e.preventDefault();
     if (validateForm()) {
       // Submit the data to the backend
-      // Use axios or fetch to send formData to the backend
+      // Use axios or fetch to send formData to the backen
+      try {
+        const response = await axios.post('http://localhost:5000/Site/Register', {formData});
+        const result= await response.json();
+      if (result.ok) {
+        alert("Supervisor added successfully")
+      }
+        
+      } catch (e) {
+        console.error(e);
+      }
+    
       console.log('Form submitted:', formData);
       // Reset the form on success
       setFormData({
@@ -46,6 +61,7 @@ const RegisterSite = () => {
         city: '',
         lat: '',
         long: '',
+        Sensitivity: 'Low',
       });
     }
   };
@@ -107,7 +123,27 @@ const RegisterSite = () => {
                   value={formData.city}
                   onChange={handleChange}
                 />
-              </Grid>
+                </Grid>
+
+                <Grid item xs={6}>
+
+                <TextField
+            select
+            label="Sensitivity"
+            name="Sensitivity"
+            value={formData.Sensitivity}
+            onChange={handleChange}
+          >
+            <MenuItem value="High">High</MenuItem>
+            <MenuItem value="Medium">Medium</MenuItem>
+            <MenuItem value="Low">Low</MenuItem>
+          </TextField>
+
+          </Grid>
+
+
+              
+
               <Grid item xs={6}>
                 <TextField
                   label="Latitude"

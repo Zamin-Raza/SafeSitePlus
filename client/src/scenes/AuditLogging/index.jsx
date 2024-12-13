@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Card, CardContent, Typography, Table, TableBody, TableCell, TableHead, TableRow, TextField, Button, Grid } from '@mui/material';
-// import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
-import { Avatar, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Avatar, MenuItem, Select, InputLabel, FormControl ,   useTheme, } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { Search } from '@mui/icons-material';
+import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+
+import {
+  DownloadOutlined,
+  Email,
+  PointOfSale,
+  PersonAdd,
+  Traffic,
+} from "@mui/icons-material";
 
 const AuditLogging = () => {
+  const theme = useTheme();
   const [filter, setFilter] = useState('');
   const [datas, setDatas] = useState([]);
   const [filteredDatas, setFilteredDatas] = useState([]);
@@ -14,10 +26,64 @@ const AuditLogging = () => {
   const [filterstatus, setFilterstatus] = useState('');
 
   const formatLogTime = (log) => {
-    const date = new Date(log.time);
+    const date = new Date(log.createdAt);
     const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
     return formattedDate;
   };
+
+  const downloadExcel = () => {
+
+    console.log("about to download")
+    const filteredDataWithoutPassword = filteredDatas.map(({ password, ...rest }) => rest);
+    const worksheet = XLSX.utils.json_to_sheet(filteredDataWithoutPassword);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Supervisors');
+  
+    XLSX.writeFile(workbook, 'supervisors.xlsx');
+  };
+
+
+  // for custom headers
+
+  // const downloadExcel = () => {
+  //   // Step 1: Filter out the 'password' field from each object
+  //   const filteredDataWithoutPassword = filteredDatas.map(({ password, ...rest }) => rest);
+  
+  //   // Step 2: Convert to worksheet with custom headers
+  //   const worksheet = XLSX.utils.json_to_sheet(filteredDataWithoutPassword);
+  
+  //   // Step 3: Customize headers if needed
+  //   const headers = ["Name", "Status", "Created At"]; // Custom headers as per your data fields
+  //   XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: "A1" });
+  
+  //   // Step 4: Create workbook and append the worksheet
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Supervisors');
+  
+  //   // Step 5: Save file
+  //   XLSX.writeFile(workbook, 'supervisors.xlsx');
+  // };
+  
+
+
+
+const downloadPDF = () => {
+  const doc = new jsPDF();
+  doc.text("Supervisors Table", 20, 10);  // 20, 10 are cordinates
+  doc.autoTable({
+    head: [['Name', 'Email', 'Site Assigned']],
+    body: filteredDatas.map(data => [
+      data.name,
+      data.email,
+      data.siteAssigned.map(site => site.SiteName).join(', ') // Combine all site names into a single string
+    ]),
+  });
+  doc.save('Supervisors List.pdf');
+}
+
+
+
+
 
   const columns = [
     {
@@ -29,32 +95,35 @@ const AuditLogging = () => {
       sortable: true,
       renderCell: (params) => (
         <div className="d-flex align-items-center">
-          <Avatar alt={params.row.userId.name} className="me-2">
-            {params.row.userId.name.charAt(0)}
+          <Avatar alt={params.row.name} className="me-2">
+            {params.row.name.charAt(0)}
           </Avatar>
-          <div>{params.row.userId.name}</div>
+          <div>{params.row.name}</div>
         </div>
       ),
     },
     {
       field: 'status',
       headerName: 'Status',
-      width: 250,
+      width: 150,
       headerClassName: 'bg-primary text-white',
       cellClassName: 'bg-light',
     },
     {
       field: 'action',
       headerName: 'Action',
-      width: 250,
+      width: 150,
       headerClassName: 'bg-primary text-white',
       cellClassName: 'bg-light',
+      renderCell: () => (
+        <Button variant="contained" startIcon={<EditIcon />} ></Button>
+      ),
     },
   ];
 
   const fetchLogged = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/Logged/All');
+      const response = await axios.get('http://localhost:5000/supervisor/All');
       setDatas(response.data);
       setFilteredDatas(response.data);
     } catch (e) {
@@ -70,9 +139,10 @@ const AuditLogging = () => {
     let filtered = datas;
 
     if (searchQuery) {
-      filtered = filtered.filter((data) => {
-        return data.userId.name.toLowerCase().includes(searchQuery.toLowerCase()) || data.status.toLowerCase().includes(searchQuery.toLowerCase());
-      });
+      filtered = filtered.filter((data) =>
+        data.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.status.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
 
     if (filterstatus) {
@@ -85,9 +155,40 @@ const AuditLogging = () => {
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 4 }}>Audit Logging</Typography>
+      <Button
+            sx={{
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.background.alt,
+              fontSize: "12px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+            
+            }}
+            onClick={downloadExcel}
+          >
+      <DownloadOutlined sx={{ mr: "10px" }} />
+     
+            Download Reports as EXCEL
+          </Button>
+
+          <Button
+            sx={{
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.background.alt,
+              fontSize: "12px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+            
+            }}
+            onClick={downloadPDF}
+          >
+      <DownloadOutlined sx={{ mr: "10px" }} />
+     
+            Download Reports as PDF
+          </Button>
 
       <TextField
-        label="Filter by User or Action"
+        label="Filter by User or Status"
         variant="outlined"
         fullWidth
         sx={{ mb: 4 }}
@@ -95,8 +196,8 @@ const AuditLogging = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-      <FormControl variant="outlined" size="small">
-        <InputLabel sx={{ fontSize: '1rem' }}>Status</InputLabel>
+      <FormControl variant="outlined" size="small" sx={{ mb: 4 }}>
+        <InputLabel>Status</InputLabel>
         <Select
           value={filterstatus}
           onChange={(e) => setFilterstatus(e.target.value)}
@@ -105,8 +206,8 @@ const AuditLogging = () => {
           <MenuItem value="">
             <em>All</em>
           </MenuItem>
-          <MenuItem value="FAILED">Failed</MenuItem>
-          <MenuItem value="SUCCESS">Success</MenuItem>
+          <MenuItem value="active">Active</MenuItem>
+          <MenuItem value="inactive">Inactive</MenuItem>
         </Select>
       </FormControl>
 
@@ -117,18 +218,28 @@ const AuditLogging = () => {
             <TableHead>
               <TableRow>
                 <TableCell>User Email</TableCell>
-                <TableCell>User ID</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell>User Name</TableCell>
+                <TableCell>Phone</TableCell>
+              
+                <TableCell>Site Assigned</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Time</TableCell>
+                <TableCell>Created At</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredDatas.map((log, index) => (
                 <TableRow key={index}>
-                  <TableCell>{log.userId.email}</TableCell>
-                  <TableCell>{log.userId.name}</TableCell>
-                  <TableCell>{log.action}</TableCell>
+                  <TableCell>{log.email}</TableCell>
+                  <TableCell>{log.name}</TableCell>
+                  <TableCell>{log.phone}</TableCell>
+                  <TableCell>
+            {log.siteAssigned.map((site, index) => (
+            <span key={site._id}>
+             {site.SiteName}
+            {index < log.siteAssigned.length - 1 && ", "}
+            </span>
+            ))}
+            </TableCell>
                   <TableCell>{log.status}</TableCell>
                   <TableCell>{formatLogTime(log)}</TableCell>
                 </TableRow>
@@ -138,49 +249,16 @@ const AuditLogging = () => {
         </CardContent>
       </Card>
 
-      <Grid container spacing={4} sx={{ mt: 4 }}>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6">Login Attempts</Typography>
-              <Typography variant="body2">Monitor and track login attempts, including failed attempts.</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6">Access Monitoring</Typography>
-              <Typography variant="body2">Generate reports on user access patterns and unusual activities.</Typography>
-              <Button variant="outlined" color="primary">Generate Report</Button>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      <Grid item xs={12} sm={6}>
-        <Card>
-          <CardContent>
-            <Typography variant="h6">In table form</Typography>
-
-            <div style={{ height: 400, width: '100%' }}>
-              <DataGrid
-                rows={filteredDatas}
-                columns={columns}
-                getRowId={(row) => row._id} // Use _id as the unique identifier
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                pageSizeOptions={[1, 2, 3, 4, 5]}
-                checkboxSelection
-                disableColumnMenu
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </Grid>
+      <div style={{ height: 400, width: '100%', marginTop: '20px' }}>
+        <DataGrid
+          rows={filteredDatas}
+          columns={columns}
+          getRowId={(row) => row._id}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+        />
+      </div>
     </Container>
   );
 };

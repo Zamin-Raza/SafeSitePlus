@@ -14,4 +14,9 @@ export default defineConfig({
       theme: path.resolve(__dirname, "src/theme"),
     },
   },
+  server: {
+    fs: {
+      allow: ['..'], // Adjust the path if necessary
+    },
+  },
 });

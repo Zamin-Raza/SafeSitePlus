@@ -9,7 +9,7 @@ import {
 } from "@mui/icons-material";
 
 import FlexBetween from "@components/FlexBetween";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { setMode } from "@state";
 import profileImage from "@assets/profile.jpg";
 import {
@@ -24,15 +24,29 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { signOut , remType} from "@state";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch , useSelector } from "react-redux";
 
 const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const type = useSelector((state) => state.global.type);
+  // const{type} = useParams();
+
+  const handleLogout = () => {
+    console.log("chala")
+    dispatch(signOut());
+    dispatch(remType());
+
+    navigate(`/login/${type}`)
+  };
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
-
   const handleClose = () => setAnchorEl(null);
 
   return (
@@ -44,9 +58,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        {/*  Left side  */}
+        {/* Left Side */}
         <FlexBetween>
-          <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)} aria-label="Menu">
             <MenuIcon />
           </IconButton>
 
@@ -56,23 +70,23 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
             gap="3rem"
             p="0.1rem 1.5rem"
           >
-            <InputBase placeholder="Search ... " />
+            <InputBase placeholder="Search ..." />
             <IconButton>
               <Search />
             </IconButton>
           </FlexBetween>
         </FlexBetween>
-        {/*  Right side */}
 
+        {/* Right Side */}
         <FlexBetween gap="1.5rem">
-          <IconButton onClick={() => dispatch(setMode())}>
+          <IconButton onClick={() => dispatch(setMode())} aria-label="Toggle Theme">
             {theme.palette.mode === "dark" ? (
               <DarkModeOutlined sx={{ fontSize: "25px" }} />
             ) : (
               <LightModeOutlined sx={{ fontSize: "25px" }} />
             )}
           </IconButton>
-          <IconButton>
+          <IconButton aria-label="Settings">
             <SettingsOutlined sx={{ fontSize: "25px" }} />
           </IconButton>
 
@@ -87,15 +101,15 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
                 gap: "1rem",
               }}
             >
-              <Box
+              {/* <Box
                 component="img"
                 alt="profile"
                 src={profileImage}
                 height="32px"
                 width="32px"
                 borderRadius="50%"
-                sx={{ objectFit: "cover" }}
-              />
+                sx={{ objectFit: "cover", cursor: "pointer" }} // Added hover cursor
+              /> */}
               <Box textAlign="left">
                 <Typography
                   fontWeight="bold"
@@ -104,7 +118,6 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
                 >
                   {user.name}
                 </Typography>
-
                 <Typography
                   fontSize="0.75rem"
                   sx={{ color: theme.palette.secondary[200] }}
@@ -116,13 +129,15 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
                 sx={{ color: theme.palette.secondary[300], fontSize: "25px" }}
               />
             </Button>
+
             <Menu
               anchorEl={anchorEl}
               open={isOpen}
-              onClose={handleClose}
+              // onClose={handleClose}
+              onClose={handleLogout}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-              <MenuItem onClick={handleClose}> Log out</MenuItem>
+              <MenuItem onClick={handleLogout}>Log out</MenuItem>
             </Menu>
           </FlexBetween>
         </FlexBetween>

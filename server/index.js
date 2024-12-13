@@ -6,24 +6,20 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
 
-import clientRoutes from "./routes/client.js";
-import generalRoutes from "./routes/general.js";
-import managementRoutes from "./routes/management.js";
-import salesRoutes from "./routes/sales.js";
+
 import weatherRoutes from "./routes/Weather.js";
 import supervisorRoutes from "./routes/Supervisor.js";
 import loginRoutes from "./routes/loginRoutes.js";
+import SiteRoutes from "./routes/SiteRoutes.js";
+import Anomaly_Details from "./routes/Anomaly_Details.js";
+import Note from "./routes/Note.js";
 
 
 
 
 /*  Data imports  */
 import User from "./models/User.js";
-import Product from "./models/Product.js";
-import ProductStat from "./models/ProductStat.js";
-import Transaction from "./models/Transaction.js";
-import OverallStat from "./models/OverallStat.js";
-import AffiliateStat from "./models/AffiliateStat.js";
+
 import {
   dataUser,
   dataProduct,
@@ -45,13 +41,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 /* Routes */
-app.use("/client", clientRoutes);
-app.use("/general", generalRoutes);
-app.use("/management", managementRoutes);
-app.use("/sales", salesRoutes);
+
 app.use("/weather", weatherRoutes);
+app.use("/Anomaly_Details",Anomaly_Details);
 app.use("/supervisor", supervisorRoutes);
 app.use("/login",loginRoutes );
+app.use("/Site",SiteRoutes );
+app.use("/Site",SiteRoutes );
+app.use("/Note",Note );
 
 /* Mongoose setup */
 const PORT = process.env.PORT || 9000;

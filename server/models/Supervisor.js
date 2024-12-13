@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
-const SupervisorSchema = new mongoose.Schema(
+const SupervisorSchema = new Schema(
   {
     name: {
       type: String,
@@ -19,11 +20,14 @@ const SupervisorSchema = new mongoose.Schema(
       required: true,
       minlength: 5,
     },
+
    
-    siteAssigned: {
-      type: String,
-      required: true, // Supervisor should be assigned to a construction site
-    },
+    siteAssigned: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Site', // The name of the model you are referencing
+      }
+    ],
     phone: {
       type: String,
       maxlength: 20, // Optional phone number

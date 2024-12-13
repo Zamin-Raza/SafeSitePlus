@@ -16,6 +16,7 @@ const Layout = () => {
 
   const userId = useSelector((state) => state.global.userId);
   const { data } = useGetUserQuery(userId);
+  console.log(userId);
 
   return (
     <Box display={isNonMoblie ? "flex" : "block"} width="100%" height="100%">

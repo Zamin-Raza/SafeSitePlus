@@ -12,6 +12,7 @@ const Forgot1 = () => {
     try {
         console.log(email);
       const response = await axios.post(`http://localhost:5000/login/forget`, { email });
+     
       // Handle success response here (e.g., navigate to another page or show success message)
     } catch (error) {
       console.error('Error during password recovery:', error);
@@ -46,14 +47,15 @@ const Forgot1 = () => {
             </label>
             <input
               type="email"
-              placeholder="Enter Email"
+              placeholder="Enter an Email"
               className="form-control"
               id="exampleInputEmail1"
               onChange={(event) => setEmail(event.target.value)}
               required
             />
+             <button type="submit" className="btn btn-secondary">Submit</button>
           </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
+         
         </form>
         <p className='container my-2'>Don't have an account?</p>
         <Link to='/register' className="btn btn-secondary">Register</Link>

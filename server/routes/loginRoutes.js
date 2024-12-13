@@ -8,9 +8,10 @@ import { login,ForgetPass ,changedpass } from "../controllers/Login.js"; // Adju
 const router = express.Router();
 
 // Define your routes
-router.post('/verify', loginvalidation, login);
+router.post('/:type/verify', loginvalidation, login);
 router.post('/forget', ForgetPass);
-router.post('/PasswordChange',changedpass );
+// router.post('/PasswordChange',changedpass );
+router.post('/PasswordChange/:id',changedpass );
 
 // router.post('/uu', login2)
 // router.post('/OTP',userLogin);

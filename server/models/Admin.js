@@ -2,26 +2,28 @@ import mongoose from "mongoose";
 
 const AdminSchema = new mongoose.Schema(
   {
-    name: {
+    email: {
       type: String,
       required: true,
       min: 2,
       max: 100,
     },
-    email: {
+    name: {
+      type: String,
+      required: true,
+      min: 6,
+    },
+    password: {
       type: String,
       required: true,
       unique: true,
       max: 50,
     },
-    password: {
-      type: String,
-      required: true,
-      min: 6,
-    },
-    Phone:{
-        type:String,
-        max: 20 ,
-    },
+   
+   
 }
+
 );
+
+const Admin_SafeSite = mongoose.model("Admin_SafeSite", AdminSchema);
+export default Admin_SafeSite;

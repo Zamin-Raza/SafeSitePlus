@@ -6,14 +6,16 @@ const Forgot2 = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const {id,token} = useParams();
+  // const {id,token} = useParams();
+  const {id} = useParams();
 
-  console.log(id + "dsadas" + token);
+  // console.log(id + "dsadas" + token);
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post(`http://localhost:5000/login/PasswordChange/${id}/${token}`, { email });
+      // const response = await axios.post(`http://localhost:5000/login/PasswordChange/${id}/${token}`, { email });
+      const response = await axios.post(`http://localhost:5000/login/PasswordChange/${id}/`, { password });
 
       console.log("bs qareeb hain");
 
@@ -54,7 +56,7 @@ const Forgot2 = () => {
               placeholder="Enter Password"
               className="form-control"
               id="exampleInputEmail1"
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => setPassword(event.target.value)}
               required
             />
           </div>

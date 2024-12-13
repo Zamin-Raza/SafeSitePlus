@@ -1,8 +1,10 @@
 // backend/controllers/SignupController.js
-import Supervisor from "../models/Supervisor.js"; // Ensure this path is correct
+import Supervisor from "../models/Supervisor.js"; 
+import Admin_SafeSite from "../models/Admin.js";
 import bcrypt from 'bcrypt'; // Importing bcrypt
 import jwt from "jsonwebtoken"; 
 import nodemailer from 'nodemailer';
+
 
 import dotenv from 'dotenv';
 
@@ -40,6 +42,8 @@ export const ForgetPass = async (req,res)=>{
     console.log("chala hn bhai")
     const{email} = req.body;
     const requser = await Supervisor.findOne({email:email});
+
+    console.log(email);
   
     
   
@@ -60,13 +64,17 @@ export const ForgetPass = async (req,res)=>{
   
     var mailOptions = {
       from: 'zaminraza095@gmail.com',
-      to: 'zaminraza095@gmail.com',
+      to: email,
       subject: 'Recover Password ',
     
     
-      text: `http://localhost:5173/recoverpassword/${requser._id}/${token}`
+      // text: `http://localhost:5173/recoverpassword/${encodeURIComponent(token)}`
+      text: `http://localhost:5173/recoverpassword/${requser._id}`
   
     };
+
+    console.log(mailOptions.to)
+    console.log(typeof(mailOptions.to))
     
     console.log(mailOptions.text);
     
@@ -109,8 +117,9 @@ const login2 = async (req, res) => {
 }
 
 export const changedpass = async(req,res)=>{
-    const{id,token} = req.params
-    const {email} = req.body
+    // const{id,token} = req.params
+    const{id} = req.params
+    const {password} = req.body
   
     const user = await Supervisor.findOne({_id : id})
   
@@ -118,8 +127,8 @@ export const changedpass = async(req,res)=>{
       console.log("nahi milla");
     }
   
-    const hash = await bcrypt.hash(email, 12);
-    console.log(email);
+    const hash = await bcrypt.hash(password, 12);
+    // console.log(email);
     console.log(hash);
   
     user.password = hash;
@@ -129,46 +138,79 @@ export const changedpass = async(req,res)=>{
     
   }
 
-
-
- export const login = async (req, res) => {
-    console.log("login verify hony laga hy")
+  export const login = async (req, res) => {
+    console.log("Login verification initiated");
+    const { type } = req.params;
+  
     try {
-        const { email, password } = req.body;
-        const user = await Supervisor.findOne({ email });
-        const errorMsg = 'Auth failed email or password is wrong';
-        if (!user) {
-            return res.status(403)
-                .json({ message: errorMsg, success: false });
-        }
+      const { email, password } = req.body;
+  
+      if (!email || !password) {
+        return res.status(400).json({
+          message: "Email and password are required.",
+          success: false,
+        });
+      }
+  
+      let user;
+      if (type === "supervisor") {
+        console.log("check in supervisor" + email , password)
+        // Find supervisor in the database
+        user = await Supervisor.findOne({ email });
+      } else if (type === "admin") {
+
+        user = await Admin_SafeSite.findOne({ email });
+        console.log(user); // Debugging log to ensure correct user is fetched
+      } else {
+        return res.status(400).json({
+          message: "Invalid user type.",
+          success: false,
+        });
+      }
+  
+      const errorMsg = "Authentication failed: Invalid email or password.";
+      if (!user) {
+        return res.status(403).json({ message: errorMsg, success: false });
+      }
+  
+      // Validate password
+      if (type === "supervisor") {
         const isPassEqual = await bcrypt.compare(password, user.password);
         if (!isPassEqual) {
-            return res.status(403)
-                .json({ message: errorMsg, success: false });
+          return res.status(403).json({ message: errorMsg, success: false });
         }
-        const jwtToken = jwt.sign(
-            { email: user.email, _id: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
-        )
-
-        res.status(200)
-            .json({
-                message: "Login Success",
-                success: true,
-                jwtToken,
-                email,
-                name: user.name,
-                // image: user.image
-            })
+      } else if (type === "admin") {
+        // Direct comparison for admin since no hashing is used
+        if (password !== user.password) {
+          return res.status(403).json({ message: errorMsg, success: false });
+        }
+      }
+  
+      // Generate JWT Token
+      const jwtToken = jwt.sign(
+        { email: user.email, _id: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" }
+      );
+  
+      // Send success response
+      res.status(200).json({
+        message: "Login successful.",
+        success: true,
+        jwtToken,
+        email: user.email,
+        name: user.name,
+        _id: user._id,
+      });
     } catch (err) {
-        res.status(500)
-            .json({
-                message: "Internal server error",
-                success: false
-            })
+      console.error("Error during login:", err);
+      res.status(500).json({
+        message: "Internal server error.",
+        success: false,
+      });
     }
-}
+  };
+  
 
 
 // const userLogin = async (req,res) =>{

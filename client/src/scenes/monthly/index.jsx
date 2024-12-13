@@ -1,157 +1,158 @@
-import { useMemo, useState } from "react";
-import { Box, useTheme } from "@mui/material";
-import Header from "@components/Header";
-import { ResponsiveLine } from "@nivo/line";
-import { useGetSalesQuery } from "@state/api";
+import React from 'react';
+import { Container, Card, CardContent, Typography, Switch, FormControlLabel, Button, Grid, MenuItem, Select, RadioGroup, Radio, FormControl, FormLabel, FormGroup } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SecurityIcon from '@mui/icons-material/Security';
+import BackupIcon from '@mui/icons-material/Backup';
+import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
+import BuildIcon from '@mui/icons-material/Build';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import { red } from '@mui/material/colors';
 
-const Monthly = () => {
-  const { data } = useGetSalesQuery();
-  const theme = useTheme();
-
-  const [formattedData] = useMemo(() => {
-    if (!data) return [];
-
-    const { monthlyData } = data;
-    const totalSalesLine = {
-      id: "totalSales",
-      color: theme.palette.secondary.main,
-      data: [],
-    };
-    const totalUnitsLine = {
-      id: "totalUnits",
-      color: theme.palette.secondary[600],
-      data: [],
-    };
-
-    Object.values(monthlyData).forEach(({ month, totalSales, totalUnits }) => {
-      totalSalesLine.data = [
-        ...totalSalesLine.data,
-        { x: month, y: totalSales },
-      ];
-      totalUnitsLine.data = [
-        ...totalUnitsLine.data,
-        { x: month, y: totalUnits },
-      ];
-    });
-
-    const formattedData = [totalSalesLine, totalUnitsLine];
-    return [formattedData];
-  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
-
+const SystemConfiguration = () => {
   return (
-    <Box m="1.5rem 2.5rem">
-      <Header title="MONTHLY SALES" subtitle="Chart of Monthly sales" />
+    <Container>
+      <Typography variant="h4" sx={{ mb: 4 }}>System Configuration</Typography>
 
-      <Box height="75vh">
-        {data ? (
-          <ResponsiveLine
-            data={formattedData}
-            theme={{
-              axis: {
-                domain: {
-                  line: {
-                    stroke: theme.palette.secondary[200],
-                  },
-                },
-                legend: {
-                  text: {
-                    fill: theme.palette.secondary[200],
-                  },
-                },
-                ticks: {
-                  line: {
-                    stroke: theme.palette.secondary[200],
-                    strokeWidth: 1,
-                  },
-                  text: {
-                    fill: theme.palette.secondary[200],
-                  },
-                },
-              },
-              legends: {
-                text: {
-                  fill: theme.palette.secondary[200],
-                },
-              },
-              tooltip: {
-                container: {
-                  color: theme.palette.primary.main,
-                },
-              },
-            }}
-            colors={{ datum: "color" }}
-            margin={{ top: 50, right: 50, bottom: 70, left: 60 }}
-            xScale={{ type: "point" }}
-            yScale={{
-              type: "linear",
-              min: "auto",
-              max: "auto",
-              stacked: false,
-              reverse: false,
-            }}
-            yFormat=" >-.2f"
-            // curve="catmullRom"
-            axisTop={null}
-            axisRight={null}
-            axisBottom={{
-              orient: "bottom",
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: 90,
-              legend: "Month",
-              legendOffset: 60,
-              legendPosition: "middle",
-            }}
-            axisLeft={{
-              orient: "left",
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: 0,
-              legend: "Total",
-              legendOffset: -50,
-              legendPosition: "middle",
-            }}
-            enableGridX={false}
-            enableGridY={false}
-            pointSize={10}
-            pointColor={{ theme: "background" }}
-            pointBorderWidth={2}
-            pointBorderColor={{ from: "serieColor" }}
-            pointLabelYOffset={-12}
-            useMesh={true}
-            legends={[
-              {
-                anchor: "top-right",
-                direction: "column",
-                justify: false,
-                translateX: 50,
-                translateY: 0,
-                itemsSpacing: 0,
-                itemDirection: "left-to-right",
-                itemWidth: 80,
-                itemHeight: 20,
-                itemOpacity: 0.75,
-                symbolSize: 12,
-                symbolShape: "circle",
-                symbolBorderColor: "rgba(0, 0, 0, .5)",
-                effects: [
-                  {
-                    on: "hover",
-                    style: {
-                      itemBackground: "rgba(0, 0, 0, .03)",
-                      itemOpacity: 1,
-                    },
-                  },
-                ],
-              },
-            ]}
-          />
-        ) : (
-          <> Loading... </>
-        )}
-      </Box>
-    </Box>
+      <Grid container spacing={4}>
+        {/* Advanced Notification Settings */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6"><NotificationsIcon sx={{ mr: 1 }} /> Advanced Notification Settings</Typography>
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable Email Notifications"
+              />
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable SMS Notifications"
+              />
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                Notification Frequency:
+              </Typography>
+              <FormControl sx={{ mt: 1 }}>
+                <Select defaultValue="">
+                  <MenuItem value="immediate">Immediate</MenuItem>
+                  <MenuItem value="daily">Daily Summary</MenuItem>
+                  <MenuItem value="weekly">Weekly Summary</MenuItem>
+                </Select>
+              </FormControl>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* User Role and Permission Management */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6"><SecurityIcon sx={{ mr: 1 }} /> User Role and Permission Management</Typography>
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable Role-Based Access Control (RBAC)"
+              />
+              <Button variant="outlined" color="primary" sx={{ mt: 2 }}>
+                Create Custom Role
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* System Maintenance Settings */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6"><BuildIcon sx={{ mr: 1 }} /> System Maintenance Settings</Typography>
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable Scheduled Downtime"
+              />
+              <Button variant="outlined" color="secondary" sx={{ mt: 2 }}>
+                Perform System Health Check
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Data Backup and Restore */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6"><BackupIcon sx={{ mr: 1 }} /> Data Backup and Restore</Typography>
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable Automated Backups"
+              />
+              <Button variant="outlined" color="secondary"  sx={{ mt: 2  }}>
+                Manual Backup
+              </Button>
+              <Button variant="outlined" color="primary" sx={{ mt: 2, ml: 2 }}>
+                Restore Data
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Integration Settings */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6"><IntegrationInstructionsIcon sx={{ mr: 1 }} /> Integration Settings</Typography>
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable API Integration"
+              />
+              <Button variant="outlined" color="primary" sx={{ mt: 2 }}>
+                Manage Webhooks
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Security Settings */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6"><SecurityIcon sx={{ mr: 1 }} /> Security Settings</Typography>
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable Two-Factor Authentication (2FA)"
+              />
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                Password Policy:
+              </Typography>
+              <FormGroup sx={{ mt: 1 }}>
+                <FormControlLabel control={<Switch />} label="Minimum Length" />
+                <FormControlLabel control={<Switch />} label="Complexity Requirements" />
+                <FormControlLabel control={<Switch />} label="Password Expiration" />
+              </FormGroup>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* UI Customization */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6"><DashboardCustomizeIcon sx={{ mr: 1 }} /> UI Customization</Typography>
+              <FormControlLabel
+                control={<Switch />}
+                label="Enable Dark Mode"
+              />
+              <FormControl sx={{ mt: 2 }}>
+                <Select defaultValue="">
+                  <MenuItem value="dark">Dark Mode</MenuItem>
+                  <MenuItem value="light">Light Mode</MenuItem>
+                </Select>
+              </FormControl>
+              <Button variant="outlined" color="primary" sx={{ mt: 2 }}>
+                Customize Dashboard Layout
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 
-export default Monthly;
+export default SystemConfiguration;

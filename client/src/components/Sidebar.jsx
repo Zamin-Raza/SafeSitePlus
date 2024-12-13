@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   Box,
@@ -14,6 +14,10 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+
+
+
+import { useDispatch , useSelector } from "react-redux";
 
 import {
   SettingsOutlined,
@@ -39,13 +43,19 @@ import {
   EditAttributes,
   MenuBook,
   AppRegistration,
+  SystemSecurityUpdate,
+  CameraAltRounded,
+  AllOutOutlined,
+  ViewAgendaOutlined,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@assets/profile.jpg";
 
+import { signOut , remType} from "@state";
+
 const navItems = [
   {
-    text: "Dashboard",
+    text: "AdminDashboard",
     icon: <HomeOutlined />,
   },
 
@@ -53,10 +63,7 @@ const navItems = [
     text: "User Management",
     icon: null,
   },
-  {
-    text: "view Notifications",
-    icon: <NotificationImportant />,
-  },
+  
   {
     text: "AddSupervisor",
     icon: <GroupAddOutlined />,
@@ -69,56 +76,122 @@ const navItems = [
     text: "Camera Details",
     icon: <CameraEnhance />,
   },
+
   {
-    text: "WeatherDetails",
-    icon: <ReceiptLongOutlined />,
+    text: "ViewSites",
+    icon: <CameraAltRounded/>,
   },
+
   {
-    text: "Customize Interface",
-    icon: <EditAttributes/>,
+    text: "view Notifications",
+    icon: <NotificationImportant />,
   },
+  
+  // {
+  //   text: "WeatherDetails",
+  //   icon: <ReceiptLongOutlined />,
+  // },
+   {
+    text: "GetAllsites",
+    icon: <AllOutOutlined/>,
+  },
+  // {
+  //   text: "Customize Interface",
+  //   icon: <EditAttributes/>,
+  // },
   {
-    text: "System Configuration",
+    text: "SystemConfiguration",
     icon: <MenuBook/>,
   },
+
+
+
   {
-    text: "Geography",
-    icon: <PublicOutlined />,
+    text: "Stats",
+    icon: <ViewAgendaOutlined/>,
   },
+ 
+  // {
+  //   text: "Overview",
+  //   icon: <PointOfSaleOutlined />,
+  // },
   {
-    text: "Sales",
-    icon: null,
+    text: "UpdateSupervisor",
+    icon: <AppRegistration />,
   },
-  {
-    text: "Overview",
-    icon: <PointOfSaleOutlined />,
-  },
-  {
-    text: "Daily",
-    icon: <TodayOutlined />,
-  },
-  {
-    text: "Monthly",
-    icon: <CalendarMonthOutlined />,
-  },
+  // {
+  //   text: "Daily",
+  //   icon: <TodayOutlined />,
+  // },
+
   {
     text: "RegisterSite",
     icon: <AppRegistration />,
   },
 
   {
-    text: "Management",
+    text: "",
+    icon: null,
+  },
+  // {
+    
+  //   text: "Admin",
+  //   icon: <AdminPanelSettingsOutlined />,
+  // },
+  // {
+  //   text: "Performance",
+  //   icon: <TrendingUpOutlined />,
+  // },
+];
+
+
+const navItems2 = [
+  {
+    text: "Dashboard",
+    icon: <HomeOutlined />,
+  },
+
+  {
+    text: "ViewSites",
     icon: null,
   },
   {
-    text: "Admin",
-    icon: <AdminPanelSettingsOutlined />,
+    text: "view Alerts",
+    icon: <NotificationImportant />,
   },
   {
-    text: "Performance",
-    icon: <TrendingUpOutlined />,
+    text: "AnomalyParameters",
+    icon: <GroupAddOutlined />,
   },
-];
+  {
+    text: "Reports",
+    icon: <Details/>,
+  },
+  {
+    text: "SiteView",
+    icon: <CameraEnhance />,
+  },
+
+  {
+    text: "Predictions",
+    icon: <CameraAltRounded/>,
+  },
+  
+  {
+    text: "WeatherDetails",
+    icon: <ReceiptLongOutlined />,
+  },
+
+
+  // {
+  //   text: "Customize Interface",
+  //   icon: <EditAttributes/>,
+  // },
+  // {
+  //   text: "System Configuration",
+  //   icon: <MenuBook/>,
+  // },
+]
 
 const Sidebar = ({
   user,
@@ -130,10 +203,26 @@ const Sidebar = ({
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const theme = useTheme();
+  // const {type} = useParams();
+  const type = useSelector((state) => state.global.type);
+  console.log("type of user is " + type);
+  // if(type == null){
+  //   type = 'supervisor'
+  // }
+  // const type = 'admin';
+  // const [dashboardtype,setdashboard] = useState("Admin");
+  const [navitems,setnavitems] = useState([])
+
 
   useEffect(() => {
     setActive(pathname.substring(1));
+
+
+  
+    console.log("type of dashboard is" + type);
+
   }, [pathname]);
   return (
     <Box component="nav">
@@ -170,7 +259,8 @@ const Sidebar = ({
               </FlexBetween>
             </Box>
             <List>
-              {navItems.map(({ text, icon }) => {
+              
+              {(type.trim()==='admin'?navItems:navItems2).map(({ text, icon }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem  3rem" }}>
@@ -179,13 +269,13 @@ const Sidebar = ({
                   );
                 }
 
-                const lcText = text.toLowerCase(); //jo text click ho ga
+                const lcText = text.toLowerCase() ; //jo text click ho ga
 
                 return (
                   <ListItem key={text} disablePadding>
                     <ListItemButton
                       onClick={() => {
-                        navigate(`/${lcText}`);
+                        navigate(`/dashboard/${type}/${lcText}`);
                         setActive(lcText);
                       }}
                       sx={{
@@ -220,7 +310,7 @@ const Sidebar = ({
               })}
             </List>
           </Box>
-          <Box position="absolute" bottom="2rem">
+          {/* <Box position="absolute" bottom="2rem">
             <Divider />
             <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
               <Box
@@ -245,7 +335,7 @@ const Sidebar = ({
                   fontSize="0.8rem"
                   sx={{ color: theme.palette.secondary[200] }}
                 >
-                  {user.occupation}
+                  {user.occuploadsation}
                 </Typography>
               </Box>
               <SettingsOutlined
@@ -255,7 +345,7 @@ const Sidebar = ({
                 }}
               />
             </FlexBetween>
-          </Box>
+          </Box> */}
         </Drawer>
       )}
     </Box>
