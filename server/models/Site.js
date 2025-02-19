@@ -48,3 +48,4 @@ const SiteSchema = new mongoose.Schema(
 
 const Site = mongoose.model("Site", SiteSchema);
 export default Site;
+

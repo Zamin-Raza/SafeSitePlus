@@ -8,8 +8,8 @@ const anomalySchema = new mongoose.Schema({
     required: true,
   },
   detectionRequirements: {
-    helmet: { type: Boolean, default: true },
-    vest: { type: Boolean, default: true },
+    Hardhat: { type: Boolean, default: true },
+    SafetyVests: { type: Boolean, default: true },
     max_persons: { type: Number, default: 4 },
     gloves: { type: Boolean, default: false },
     safetyBoots: { type: Boolean, default: false },

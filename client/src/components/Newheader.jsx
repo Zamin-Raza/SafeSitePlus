@@ -178,7 +178,7 @@ export default function Header() {
           <Link to="/about">
             <li className="hidden sm:inline text-gray-700 hover:text-yellow-400">About</li>
           </Link>
-          <Link to="/profile">
+          <Link to="/login/supervisor">
             {currentUser ? (
               <img className="rounded-full h-7 w-7 object-cover" src={currentUser.avatar} alt="profile" />
             ) : (

@@ -69,7 +69,7 @@ export const ForgetPass = async (req,res)=>{
     
     
       // text: `http://localhost:5173/recoverpassword/${encodeURIComponent(token)}`
-      text: `http://localhost:5173/recoverpassword/${requser._id}`
+      text:"Your Link to change password is " +  `http://localhost:5173/recoverpassword/${requser._id}`
   
     };
 

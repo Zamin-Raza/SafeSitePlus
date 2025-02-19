@@ -41,6 +41,8 @@ import Search from "@scenes/Search";
 import Listing from "@scenes/Listing"
 import UpdateSite  from "@scenes/UpdateSite"
 
+import NotesComponent from "@scenes/Notes";
+
 
 // management
 import Admin from "@scenes/admin";
@@ -49,9 +51,11 @@ import Weather from "@scenes/Weather";
 import Updateprofile from "@scenes/UpdateProfile";
 import Forgot1 from "./components/Forget1"
 import Forgot2 from "./components/Forget2"
+import NotificationModal from "./components/NotificationModal"
 import NewHeader from "./components/Newheader"
 import NotificationsPage from "@scenes/NotificationPage";
 import LandingPage from "@scenes/LandingPage";
+import DetailedAlert from "@scenes/DetailedAlert";
 
 
 
@@ -65,12 +69,14 @@ function App() {
     const UserType = useSelector((state) => state.global.type);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
+
   return (
     <div className="app">
       <BrowserRouter>
     
 
       <Routes>
+      <Route path="/Notes" element={<NotesComponent/>} />
      
         
       <Route path="/forgot-password" element={<Forgot1/>} />
@@ -78,16 +84,24 @@ function App() {
     
       </Routes>
       
+          <Routes>
+          <Route path="/home" element={<LandingPage />} />
+        
+          </Routes>
+      
      
-        {/* <ThemeProvider theme={theme}> */}
-          <CssBaseline />
-          <NewHeader/>
+        <ThemeProvider theme={theme}>
+        <CssBaseline />
+         
+       
 
           <Routes>
           <Route path='/Updateprofile/:id' element={<Updateprofile/>} />
           <Route path='/notification' element={<NotificationsPage />} />
+       
          
-          <Route path="/home" element={<LandingPage />} />
+    
+          <Route path="/login/:type" element={<Login/>} />
        
           {/* <Route
           path="/dashboard/:type"
@@ -109,7 +123,7 @@ function App() {
           
           <Route path='/supervisor' element={<SupDash/>} />
          
-          <Route path="/login/:type" element={<Login/>} />
+          
           {/* <Route path="/login/admin" element={<Login/>} /> */}
          
             <Route path='/search' element={<Search />} />
@@ -125,8 +139,12 @@ function App() {
          
           {/* <Route path="/video" element={<FileViewer/>} /> */}
           <Route path="/dashboard/:type/viewsites" element={<Video/>} />
+          {/* <Route path="/dashboard/supervisor/viewalerts" element={<NotificationModal/>} /> */}
+       
          
             <Route element={<Layout />}>
+            <Route path="/dashboard/supervisor/viewalerts" element={<NotificationsPage/>} />
+            <Route path="detailAlerts/:id" element={<DetailedAlert/>} />
             {/* <Route
            path="/dashboard/:type"
            element={
@@ -147,6 +165,8 @@ function App() {
           />
            <Route path='/dashboard/supervisor/siteview' element={<Site/>}/>
            <Route path='/dashboard/supervisor/anomalyparameters' element={<UpdateSite/>} />
+        
+           
 
      
 
@@ -207,7 +227,7 @@ function App() {
               <Route path="/performance" element={<Performance />} />
             </Route>
           </Routes>
-        {/* </ThemeProvider> */}
+        </ThemeProvider>
       </BrowserRouter>
     </div>
   );

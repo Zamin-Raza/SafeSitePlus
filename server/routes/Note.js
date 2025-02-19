@@ -1,10 +1,12 @@
-import express from 'express';
-import { createNote, getAllNotes, updateNote, deleteNote } from '../controllers/Note.js';
+import express from "express";
+import { createNote, getAllNotes, updateNote, deleteNote, checking } from '../controllers/Note.js';
 
 const router = express.Router();
 
 // Route to create a new note
 router.post('/notes', createNote);
+
+router.get("/check", checking);
 
 // Route to get all notes for a specific supervisor
 router.get('/notes/:supervisorId', getAllNotes);

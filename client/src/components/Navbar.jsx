@@ -39,6 +39,8 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
     console.log("chala")
     dispatch(signOut());
     dispatch(remType());
+    localStorage.removeItem("authToken");
+
 
     navigate(`/login/${type}`)
   };

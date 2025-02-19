@@ -12,7 +12,9 @@ import supervisorRoutes from "./routes/Supervisor.js";
 import loginRoutes from "./routes/loginRoutes.js";
 import SiteRoutes from "./routes/SiteRoutes.js";
 import Anomaly_Details from "./routes/Anomaly_Details.js";
-import Note from "./routes/Note.js";
+import Note from "./routes/Note.js"
+import detected_anomalies from "./routes/detected_anomalies.js"
+import response from "./routes/Incidents.js"
 
 
 
@@ -48,7 +50,10 @@ app.use("/supervisor", supervisorRoutes);
 app.use("/login",loginRoutes );
 app.use("/Site",SiteRoutes );
 app.use("/Site",SiteRoutes );
-app.use("/Note",Note );
+app.use("/Notes",Note );
+app.use("/alerts",detected_anomalies );
+app.use("/response",response);
+
 
 /* Mongoose setup */
 const PORT = process.env.PORT || 9000;

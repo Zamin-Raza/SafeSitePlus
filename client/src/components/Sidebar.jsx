@@ -156,7 +156,7 @@ const navItems2 = [
     icon: null,
   },
   {
-    text: "view Alerts",
+    text: "viewAlerts",
     icon: <NotificationImportant />,
   },
   {
@@ -208,6 +208,16 @@ const Sidebar = ({
   // const {type} = useParams();
   const type = useSelector((state) => state.global.type);
   console.log("type of user is " + type);
+
+
+
+
+  const token = localStorage.getItem('authToken');
+
+  console.log("token is " + token);
+
+
+ 
   // if(type == null){
   //   type = 'supervisor'
   // }
@@ -217,7 +227,11 @@ const Sidebar = ({
 
 
   useEffect(() => {
-    setActive(pathname.substring(1));
+    setActive(pathname.substring(3));
+
+    if(type == null || !token){
+      navigate('/login/supervisor')
+    }
 
 
   
@@ -269,7 +283,8 @@ const Sidebar = ({
                   );
                 }
 
-                const lcText = text.toLowerCase() ; //jo text click ho ga
+                const lcText = text.toLowerCase(); 
+                console.log(lcText)//jo text click ho ga
 
                 return (
                   <ListItem key={text} disablePadding>

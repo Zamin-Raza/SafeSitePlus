@@ -1,7 +1,12 @@
 import Note from '../models/Note.js';
 
 export const createNote = async (req, res) => {
+  console.log("add hony wla aik note");
+  console.log(req.body);
+  
   const { supervisorId, title, content, priority, dueDate, isImportant } = req.body;
+
+  
 
   try {
     const newNote = new Note({
@@ -32,7 +37,7 @@ export const createNote = async (req, res) => {
 
 export const getAllNotes = async (req, res) => {
   const { supervisorId } = req.params;
-
+console.log("hn abhi ajain gy");
   try {
     const notes = await Note.find({ supervisorId }).sort({ createdAt: -1 });
 
@@ -55,6 +60,10 @@ export const getAllNotes = async (req, res) => {
     });
   }
 };
+
+export const checking = async(req,res)=>{
+  console.log("dsadsadsa");
+}
 
 
 

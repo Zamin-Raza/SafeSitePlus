@@ -8,6 +8,7 @@ import sliderImage2 from "./image3.jpg";
 import sliderImage3 from "./image2.jpg";
 import safeSiteImage from "./image.jpg";
 import "./typewriter.css";
+import NewHeader from "@components/NewHeader";
 
 import inciimage1 from "./incident1.jpeg";
 import inciimage2 from "./incident3.jpg";
@@ -69,7 +70,9 @@ const LandingPage = () => {
   }, []);
 
   return (
+   
     <div>
+       <NewHeader/>
       {/* About SafeSite+ */}
       <section className="text-white pt-12 text-center">
         <h1 className="text-4xl font-bold mb-4 text-slate-600 animate-typewriter">

@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa';
 
-export default function NotificationModal({ isModalOpen, setIsModalOpen, notifications }) {
+// export default function NotificationModal({ isModalOpen, setIsModalOpen, notifications }) {
+const NotificationModal =({isModalOpen,setIsModalOpen,notification})=>{
   // Toggle modal visibility
   const handleNotificationClick = () => {
     setIsModalOpen(!isModalOpen);
@@ -77,3 +78,5 @@ export default function NotificationModal({ isModalOpen, setIsModalOpen, notific
     </div>
   );
 }
+
+export default NotificationModal;

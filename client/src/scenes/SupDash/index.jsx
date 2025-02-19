@@ -264,7 +264,7 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="bg-white bg-opacity-30 backdrop-blur-lg p-6 rounded-lg shadow-lg glass-effect">
+          {/* <div className="bg-white bg-opacity-30 backdrop-blur-lg p-6 rounded-lg shadow-lg glass-effect">
   <h3 className="text-xl font-semibold mb-4">Assigned Sites</h3>
   <Slider {...settings}>
   {Mysites.map((site) => (
@@ -273,7 +273,7 @@ useEffect(() => {
     </div>
   ))}
   </Slider>
-</div>
+</div> */}
 
 {/* Incident Trends Section */}
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-white bg-opacity-50 backdrop-blur-md mt-10 rounded-lg shadow-lg p-6">

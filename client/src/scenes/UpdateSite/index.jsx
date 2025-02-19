@@ -157,8 +157,8 @@ export default function UpdateSite() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     anomalies: {
-      helmet: false,
-      vest: false,
+      Hardhat: false,
+      SafetyVests: false,
       max_persons: 0,
       gloves: false,
       safetyBoots: false,
