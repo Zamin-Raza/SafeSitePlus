@@ -23,7 +23,7 @@ const anomalyResponseSchema = new mongoose.Schema({
     type: Date,
     default: null, // Stores timestamp when status is changed to "Resolved"
   },
-});
+},{ timestamps: true });
 
 // Create Model
 const AnomalyResponse = mongoose.model("AnomalyResponse", anomalyResponseSchema);

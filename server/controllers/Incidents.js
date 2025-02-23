@@ -2,6 +2,8 @@ import AnomalyResponse from "../models/Incidents.js";
 
 import DetectedAnomaly from "../models/detected_anomalies.js"; // Your alert model
 
+import Supervisor from "../models/Supervisor.js"; 
+
 export const deleteAlertAndResponse = async (req, res) => {
   try {
     const { id } = req.params; // Alert ID
@@ -61,6 +63,65 @@ export const updateAnomalyResponse = async (req, res) => {
   } catch (error) {
     console.error("Error updating anomaly response:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const sendEmailAlert = async (req,res) => {
+const supervisorId = req.params
+  try {
+      // Step 1: Get all unresolved anomaly responses
+      const unresolvedAnomalies = await AnomalyResponse.find({ status: "Unresolved" });
+
+      if (!unresolvedAnomalies.length) {
+          console.log("✅ No unresolved anomalies found.");
+          return;
+      }
+
+      // Step 2: Fetch detected anomalies using anomalyId from AnomalyResponse
+      const anomalyIds = unresolvedAnomalies.map(anomaly => anomaly.anomalyId);
+      const detectedAnomalies = await DetectedAnomaly.find({ _id: { $in: anomalyIds } });
+
+      if (!detectedAnomalies.length) {
+          console.log("⚠️ No detected anomalies found for unresolved cases.");
+          return;
+      }
+
+      // Step 3: Get Supervisor Details
+      const supervisor = await Supervisor.findById(supervisorId);
+
+      if (!supervisor || !supervisor.alternateEmail) {
+          console.log("⚠️ Supervisor or alternate email not found.");
+          return;
+      }
+
+      // Construct email content
+      const emailContent = detectedAnomalies.map(anomaly =>
+          `📍 Site ID: ${anomaly.siteId}\n` +
+          `🔍 Description: ${anomaly.description}\n` +
+          `🕒 Detected At: ${new Date(anomaly.detectedAt).toLocaleString()}\n`
+      ).join("\n----------------------\n");
+
+      // Step 4: Send Email Alert
+      const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: 'zaminraza095@gmail.com',
+            pass: 'svtu pbaj nppi ynkf',
+          }
+      });
+
+      const mailOptions = {
+          from: process.env.EMAIL_USER,
+          to: supervisor.alternateEmail,
+          subject: "🚨 Unresolved Anomalies Alert - Immediate Action Required",
+          text: `Dear ${supervisor.name},\n\nThe following anomalies remain unresolved:\n\n${emailContent}\n\nPlease take immediate action.\n\nBest Regards,\nSafety Monitoring System`
+      };
+
+      await transporter.sendMail(mailOptions);
+      console.log(`📧 Alert sent to ${supervisor.alternateEmail}`);
+
+  } catch (error) {
+      console.error("❌ Error sending alert:", error);
   }
 };
 

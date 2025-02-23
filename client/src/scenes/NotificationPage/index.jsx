@@ -175,9 +175,11 @@ export default function NotificationsPage() {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('http://localhost:5000/alerts/detectedAnomalies');
+        // const { data } = await axios.get('http://localhost:5000/alerts/detectedAnomalies');
+        const { data } = await axios.get('http://localhost:8000/prioritized-alerts');
         console.log(data);
-        setNotifications(data.map((item) => ({
+        
+        setNotifications(data.prioritized_alerts.map((item) => ({
           id: item._id,
           siteId: item.siteId,
           description: item.description,
