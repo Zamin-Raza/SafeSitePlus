@@ -195,90 +195,123 @@
 // export default Site;
 
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import lionVideo from "./lion5.mp4"; // Replace with the actual path to your video file
+import { Box, Typography, Card, CardContent, CardMedia } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 const Site = () => {
-  const dispatch = useDispatch();
   const [Mysites, setMysites] = useState([]);
   const navigate = useNavigate();
 
   const UserId = "675c24c6d8670f67b459203c"; // Replace with actual userId logic
-  const fetchyourSites = async () => {
+
+  const fetchYourSites = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/Site/myAll/${UserId}`
-      );
+      const response = await axios.get(`http://localhost:5000/Site/myAll/${UserId}`);
       console.log("Response data:", response.data);
 
-      // Transform the response data
-      const allSites = response.data;
-      const updatedSiteData = allSites.map((site) => ({
+      const allSites = response.data.map((site) => ({
         SiteID: site._id,
-        SiteName: site.SiteName, // Use either `SiteName` or `name`
-        SiteAddress: site.SiteAddress, // Use either `SiteAddress` or `address`
+        SiteName: site.SiteName,
+        SiteAddress: site.SiteAddress,
         City: site.City,
-        Sensitivity: site.Sensitivity || "Unknown", // Default value if `Sensitivity` is missing
-        Active: site.Active, // Ensure `Active` is handled correctly
-        media: lionVideo, // Placeholder video; replace with actual media if available
+        Sensitivity: site.Sensitivity || "Unknown",
+        Active: site.Active,
+        media: `http://localhost:8000/stream-video/${site.SiteName}.mp4`, // Keeping original API source
       }));
 
-      // Update state
-      setMysites(updatedSiteData);
+      setMysites(allSites);
     } catch (error) {
       console.error("Error fetching site data:", error);
     }
   };
 
   useEffect(() => {
-    fetchyourSites();
+    fetchYourSites();
   }, []);
 
   return (
-    <div className="p-6 space-y-6 bg-gradient-to-b from-yellow-500 via-yellow-200 to-yellow-100 min-h-screen">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-black">Supervisor Sites</h1>
-        <p className="text-lg text-gray-700 mt-4">
-          Manage all your assigned sites and monitor their cameras here!
-        </p>
-      </div>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: "linear-gradient(to bottom, #F59E0B, #FDE68A, #FEF3C7)", // Updated background
+        p: 4,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          p: 6,
+          bgcolor: "rgba(255, 255, 255, 0.3)", // Translucent background
+          borderRadius: 2,
+          boxShadow: 3,
+          backdropFilter: "blur(10px)", // Blur effect
+          width: "100%",
+          maxWidth: "1200px", // Keeps content centered and responsive
+        }}
+      >
+                {/* Welcome Section */}
+                <Box textAlign="center" mb={4}>
+                  <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
+                  Supervisor Sites
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    fontFamily="Dancing Script"
+                    color="text.secondary"
+                  >
+                  Manage all your assigned sites and monitor their cameras here!
+                  </Typography>
+                </Box>
 
-      {/* Dynamic Sites Mapping */}
-      {Mysites.map((site) => (
-        <div
-          key={site.SiteID}
-          className="bg-white bg-opacity-30 backdrop-blur-lg rounded-lg shadow-lg p-6 mb-6"
-          onClick={() => navigate(`/listing/${site.SiteID}`)}
-        >
-     
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-800">{site.SiteName}</h2>
-            <p className="text-gray-600 mt-2">
-              Address: {site.SiteAddress} | City: {site.City}
-            </p>
-            <img
-              src={`http://localhost:8000/stream-video/${site.SiteName}.mp4`}
+        {/* Dynamic Sites Mapping */}
+        {Mysites.map((site) => (
+          <Card
+            key={site.SiteID}
+            sx={{
+              mb: 4,
+              boxShadow: 3,
+              borderRadius: 2,
+              bgcolor: "rgba(255, 255, 255, 0.9)", // Light transparency
+              backdropFilter: "blur(10px)",
+              cursor: "pointer",
+            }}
+            onClick={() => navigate(`/listing/${site.SiteID}`)}
+          >
+            {/* Using <img> instead of <video> while keeping the original .mp4 API source */}
+            <CardMedia
+              component="img"
+              height="250"
+              image={site.media}
               alt={site.SiteName}
-              className="rounded-lg w-full h-64 object-cover mt-4"
+              sx={{ borderRadius: "8px 8px 0 0" }}
             />
-          </div>
 
-          <div className="mt-6">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              Sensitivity: {site.Sensitivity}
-            </h3>
-            <p className={`text-lg font-semibold ${site.Active ? "text-green-500" : "text-red-500"}`}>
-              Status: {site.Active ? "Active" : "Inactive"}
-            </p>
-          </div>
-         
-        </div>
-      ))}
-    </div>
+            <CardContent sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(5px)" }}>
+              <Typography variant="h5" fontWeight="bold" color="black">
+                {site.SiteName}
+              </Typography>
+              <Typography variant="body1" color="black" mt={1}>
+                Address: {site.SiteAddress} | City: {site.City}
+              </Typography>
+              <Typography variant="h6" fontWeight="bold" color="black" mt={2}>
+                Sensitivity: {site.Sensitivity}
+              </Typography>
+              <Typography
+                variant="body1"
+                fontWeight="bold"
+                sx={{ color: site.Active ? "green" : "red" }}
+              >
+                Status: {site.Active ? "Active" : "Inactive"}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Box>
+    </Box>
   );
 };
 
 export default Site;
-
-
