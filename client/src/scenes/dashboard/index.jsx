@@ -8,6 +8,7 @@ import { Box, Button, Typography, useTheme, Grid } from "@mui/material";
 import StatBox from "@components/StatBox";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+// import SupDash from 'scenes/SupDash';
 
 
 const Dashboard = () => {
@@ -25,6 +26,7 @@ const Dashboard = () => {
   });
 
  const {type} = useParams();
+ console.log(type);
 
  const UserId = useSelector((state) => state.global.userId);
 

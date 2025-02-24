@@ -45,7 +45,7 @@ const RegisterSite = () => {
         const response = await axios.post('http://localhost:5000/Site/Register', {formData});
         const result= await response.json();
       if (result.ok) {
-        alert("Supervisor added successfully")
+        alert("Site added successfully")
       }
         
       } catch (e) {

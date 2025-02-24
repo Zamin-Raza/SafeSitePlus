@@ -154,7 +154,20 @@ function App() {
             }
             /> */}
 
+<Route
+  path="/dashboard/:type"
+  element={
+    userId && UserType === 'admin' ? (
+      <Dashboard />
+    ) : userId && UserType === 'supervisor' ? (
+      <SupDash />
+    ) : (
+      <Navigate to={`/login/supervisor`} replace />
+    )
+  }
+/>
 
+{/* 
 <Route
           path="/dashboard/:type"
          element={
@@ -162,7 +175,7 @@ function App() {
             ? <Dashboard /> 
           : <Navigate to={`/login/supervisor`} replace />
            }
-          />
+          /> */}
            <Route path='/dashboard/supervisor/siteview' element={<Site/>}/>
            <Route path='/dashboard/supervisor/anomalyparameters' element={<UpdateSite/>} />
         

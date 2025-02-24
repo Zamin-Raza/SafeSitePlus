@@ -8,7 +8,7 @@ import { FaStickyNote, FaPen, FaFileDownload } from "react-icons/fa"; // Import 
 import { Line, Doughnut } from "react-chartjs-2"; // Import both Line and Doughnut charts
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Title, Tooltip, Legend } from "chart.js";
 //import "./index.css";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import axios from 'axios';
 
 
@@ -29,8 +29,8 @@ const SupDash = () => {
   const dispatch = useDispatch();
   const [Mysites , setMysites] = useState([]);
 
-  // const UserId  = useSelector((state) => state.global.userId);
-  const UserId  = '675c24c6d8670f67b459203c'
+  const UserId  = useSelector((state) => state.global.userId);
+  // const UserId  = '675c24c6d8670f67b459203c'
 
   // const fetchyourSites = async () => {
   //   try {
@@ -57,6 +57,18 @@ const SupDash = () => {
   //     console.error("Error fetching site data:", error);
   //   }
   // };
+
+  const sendidtobackend = async () =>{
+    try{
+      console.log("hn id backend p jany lagi")
+      const response = await axios.post(`http://localhost:5000/response/saveID/${UserId}`);
+
+    }
+    catch (error){
+      console.log(error);
+
+    }
+  }
 
   const fetchyourSites = async () => {
     try {
@@ -94,7 +106,12 @@ const SupDash = () => {
 useEffect(() => {
  
     fetchyourSites();
+    sendidtobackend();
 }, []);
+
+// useEffect(()=>{
+//   sendidtobackend();
+// },[]);
 
 
 

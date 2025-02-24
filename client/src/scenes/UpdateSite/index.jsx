@@ -152,6 +152,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiAlertTriangle, FiUserCheck } from 'react-icons/fi';
 import axios from 'axios';
+import { useDispatch , useSelector } from "react-redux";
 
 export default function UpdateSite() {
   const navigate = useNavigate();
@@ -171,7 +172,8 @@ export default function UpdateSite() {
   const [loading, setLoading] = useState(false);
   const [Mysites, setMysites] = useState([]);
 
-  const UserId = '675c24c6d8670f67b459203c'; // Example UserId
+  // const UserId = '675c24c6d8670f67b459203c'; // Example UserId
+  const UserId  = useSelector((state) => state.global.userId);
 
   // Fetch sites
   const fetchYourSites = async () => {

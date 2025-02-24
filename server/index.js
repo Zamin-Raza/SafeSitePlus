@@ -15,6 +15,7 @@ import Anomaly_Details from "./routes/Anomaly_Details.js";
 import Note from "./routes/Note.js"
 import detected_anomalies from "./routes/detected_anomalies.js"
 import response from "./routes/Incidents.js"
+import axios from 'axios';
 
 
 
@@ -55,6 +56,13 @@ app.use("/alerts",detected_anomalies );
 app.use("/response",response);
 
 
+const API_URL = 'http://localhost:5000/response/sendemailAlert'; // Replace with your actual API endpoint
+
+// Function to call the API every 15 minutes
+
+
+
+
 /* Mongoose setup */
 const PORT = process.env.PORT || 9000;
 mongoose
@@ -81,3 +89,18 @@ mongoose
     // AffiliateStat.insertMany(dataAffiliateStat);
   })
   .catch((error) => console.log(` ${error} did not connect`));
+
+  const checkAlerts = async () => {
+    try {
+        const response = await axios.get(API_URL);
+        console.log('✅ Alert check triggered:', response.data);
+    } catch (error) {
+        console.error('❌ Error calling alert API:', error.message);
+    }
+};
+
+// Run `checkAlerts` every 15 minutes (900000 ms)
+// setInterval(checkAlerts, 900000);
+// setInterval(checkAlerts, 60000);
+
+// console.log('⏳ Auto alert checker started...');

@@ -3,6 +3,7 @@ import AnomalyResponse from "../models/Incidents.js";
 import DetectedAnomaly from "../models/detected_anomalies.js"; // Your alert model
 
 import Supervisor from "../models/Supervisor.js"; 
+import nodemailer from 'nodemailer';
 
 export const deleteAlertAndResponse = async (req, res) => {
   try {
@@ -66,8 +67,19 @@ export const updateAnomalyResponse = async (req, res) => {
   }
 };
 
+let supervisorId = null
+
+export const saveID = async(req,res)=>{
+  console.log("abhi ID save ho jaye gi");
+  supervisorId = req.params.id
+ 
+  res.json({ message: 'UserID stored successfully' });
+
+}
+
 export const sendEmailAlert = async (req,res) => {
-const supervisorId = req.params
+  console.log("gg ye wala chal jaye ga");
+  console.log(supervisorId + "ye id hy ");
   try {
       // Step 1: Get all unresolved anomaly responses
       const unresolvedAnomalies = await AnomalyResponse.find({ status: "Unresolved" });

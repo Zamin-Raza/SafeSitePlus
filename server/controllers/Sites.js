@@ -69,6 +69,7 @@ export const addSite = async (req, res) => {
     if (!anomalyResponse.success) {
       return res.status(400).json({ message: anomalyResponse.message });
     }
+    console.log("site created");
 
     // Respond with the newly created Site and anomaly information
     res.status(201).json({
