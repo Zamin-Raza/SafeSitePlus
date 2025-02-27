@@ -207,6 +207,36 @@ export const CreateAnomaly = async (siteId) => {
 //   }
 // };
 
+
+export const updateSite = async (req, res) => {
+  console.log("hn ye wali upadte ho jaye gi")
+  const { id } = req.params; // Extract the site ID from the request parameters
+  const { Sensitivity, Active } = req.body; // Extract the fields to update from the request body
+
+  try {
+    // Find the site by ID and update the specified fields
+    const updatedSite = await Site.findOneAndUpdate(
+      { _id: id }, // Query by SiteID
+      { Sensitivity, Active }, // Fields to update
+      { new: true } // Return the updated document
+    );
+
+    // If the site is not found, return a 404 error
+    if (!updatedSite) {
+      return res.status(404).json({ message: "Site not found" });
+    }
+
+    // Return the updated site data
+    res.status(200).json(updatedSite);
+  } catch (error) {
+    // Handle errors
+    console.error("Error updating site:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+
+
 export const SetActive = async (req, res) => {
   try {
     const { UserId, siteId , flag } = req.body;

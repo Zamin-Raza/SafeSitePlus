@@ -122,7 +122,7 @@ const AssignedSiteCard = ({ site }) => {
           color: "white",
         }}
       >
-        {isOnline ? "Online" : "Offline"}
+        {isOnline ? "Active" : "Closed"}
       </Box>
 
       {/* Video Section */}

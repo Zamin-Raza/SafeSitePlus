@@ -4,7 +4,8 @@ import {
  getAllSites,
  myAllsites,
  SetActive,
- SpecificSite
+ SpecificSite,
+ updateSite
  
 
 } from "../controllers/Sites.js";
@@ -16,6 +17,7 @@ router.get("/SetActive", SetActive); // Get all supervisors
 // router.get("/myAll/:UserId", myAllsites); 
 router.get('/myAll/:UserId', myAllsites);
 router.get('/SpecificSite/:id', SpecificSite);
+router.put('/Update/:id',updateSite)
 // Get all supervisors
 // router.get("/supervisors/:id", getSupervisorById); // Get a specific supervisor by ID
 router.post("/Register", addSite); // Create a new supervisor

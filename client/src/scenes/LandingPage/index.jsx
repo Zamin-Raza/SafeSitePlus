@@ -74,7 +74,7 @@ const LandingPage = () => {
     <div>
        <NewHeader/>
       {/* About SafeSite+ */}
-      <section className="text-white pt-12 text-center">
+      <section className="text-white pt-12 text-center" >
         <h1 className="text-4xl font-bold mb-4 text-slate-600 animate-typewriter">
           About SafeSite Plus+
         </h1>

@@ -35,6 +35,7 @@ import SupDash  from "@scenes/SupDash";
 import Breakdown from "@scenes/breakdown";
 
 import Site from "@scenes/Site";
+import Activate from "@scenes/ActivateSite";
 import SiteFootage from "@scenes/SiteFootage";
 
 import Search from "@scenes/Search";
@@ -56,6 +57,7 @@ import NewHeader from "./components/Newheader"
 import NotificationsPage from "@scenes/NotificationPage";
 import LandingPage from "@scenes/LandingPage";
 import DetailedAlert from "@scenes/DetailedAlert";
+import StatsSupervisor from "@scenes/StatsSupervisor";
 
 
 
@@ -81,6 +83,7 @@ function App() {
         
       <Route path="/forgot-password" element={<Forgot1/>} />
       <Route path="/recoverpassword/:id/" element={<Forgot2/>} />
+      <Route path="/Stats" element={<StatsSupervisor/>} />
     
       </Routes>
       
@@ -129,7 +132,7 @@ function App() {
             <Route path='/search' element={<Search />} />
             <Route path='/Footage' element={<SiteFootage />} />
             {/* <Route path='/listing/:listingId' element={<Listing />} /> */}
-            <Route path='/listing/:siteId' element={<Listing />} />
+         
             <Route path='/site' element={<Site />} />
             {/* <Route path='/dashboard/supervisor/anomalyparameters' element={<UpdateSite/>} /> */}
         
@@ -143,8 +146,7 @@ function App() {
        
          
             <Route element={<Layout />}>
-            <Route path="/dashboard/supervisor/viewalerts" element={<NotificationsPage/>} />
-            <Route path="detailAlerts/:id" element={<DetailedAlert/>} />
+          
             {/* <Route
            path="/dashboard/:type"
            element={
@@ -177,7 +179,11 @@ function App() {
            }
           /> */}
            <Route path='/dashboard/supervisor/siteview' element={<Site/>}/>
+           <Route path='/dashboard/supervisor/activate' element={<Activate/>}/>
            <Route path='/dashboard/supervisor/anomalyparameters' element={<UpdateSite/>} />
+           <Route path="/dashboard/supervisor/viewalerts" element={<NotificationsPage/>} />
+           <Route path="detailAlerts/:id" element={<DetailedAlert/>} />
+           <Route path='/listing/:siteId' element={<Listing />} />
         
            
 

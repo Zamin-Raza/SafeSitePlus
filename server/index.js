@@ -49,7 +49,7 @@ app.use("/weather", weatherRoutes);
 app.use("/Anomaly_Details",Anomaly_Details);
 app.use("/supervisor", supervisorRoutes);
 app.use("/login",loginRoutes );
-app.use("/Site",SiteRoutes );
+app.use("/Site",SiteRoutes ); 
 app.use("/Site",SiteRoutes );
 app.use("/Notes",Note );
 app.use("/alerts",detected_anomalies );
@@ -98,6 +98,7 @@ mongoose
         console.error('❌ Error calling alert API:', error.message);
     }
 };
+
 
 // Run `checkAlerts` every 15 minutes (900000 ms)
 // setInterval(checkAlerts, 900000);

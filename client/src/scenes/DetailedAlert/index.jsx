@@ -77,7 +77,7 @@ export default function AlertDetails() {
       <p className="text-gray-500 mt-1 text-sm">Detected at: {new Date(alert.detectedAt).toLocaleString()}</p>
 
       <img
-        src={`${API_BASE_URL}/alert-image/${id}.jpg`}
+        src={`${API_BASE_URL}/alert-image/${id}.jpg`} 
         alt="Alert Snapshot"
         className="mt-4 w-full h-64 object-cover rounded-lg shadow-md"
       />
