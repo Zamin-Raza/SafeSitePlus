@@ -78,12 +78,12 @@ function App() {
     
 
       <Routes>
-      <Route path="/Notes" element={<NotesComponent/>} />
+      
      
         
       <Route path="/forgot-password" element={<Forgot1/>} />
       <Route path="/recoverpassword/:id/" element={<Forgot2/>} />
-      <Route path="/Stats" element={<StatsSupervisor/>} />
+
     
       </Routes>
       
@@ -182,8 +182,10 @@ function App() {
            <Route path='/dashboard/supervisor/activate' element={<Activate/>}/>
            <Route path='/dashboard/supervisor/anomalyparameters' element={<UpdateSite/>} />
            <Route path="/dashboard/supervisor/viewalerts" element={<NotificationsPage/>} />
+           <Route path="/dashboard/supervisor/Stats" element={<StatsSupervisor/>} />
            <Route path="detailAlerts/:id" element={<DetailedAlert/>} />
            <Route path='/listing/:siteId' element={<Listing />} />
+           <Route path="/dashboard/supervisor/Notes" element={<NotesComponent/>} />
         
            
 
