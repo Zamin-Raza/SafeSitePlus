@@ -48,7 +48,6 @@ import {
   AllOutOutlined,
   ViewAgendaOutlined,
   EditLocation,
-  StarTwoTone,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@assets/profile.jpg";
@@ -173,10 +172,7 @@ const navItems2 = [
     text: "SiteView",
     icon: <CameraEnhance />,
   },
-  {
-    text: "Stats",
-    icon: <StarTwoTone/>,
-  },
+
   {
     text: "Activate",
     icon: <EditLocation/>,
