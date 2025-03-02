@@ -29,7 +29,7 @@
 
 // import SystemConfiguration   from "@scenes/monthly";
 // import GetAllsites   from "@scenes/GetAllsites";
-// import Stats   from "@scenes/stats";
+
 // import SupDash  from "@scenes/SupDash";
 // // import FileViewer  from "@scenes/Video";
 // import Breakdown from "@scenes/breakdown";
@@ -261,6 +261,7 @@ import RegisterSite from "@scenes/RegisterSite";
 import UpdateSupervisor from "@scenes/UpdateSupervisor";
 import EditInfoForm from "@scenes/EditInfo";
 import Video from "@scenes/SiteFootage";
+import GetAllsites from "@scenes/GetAllsites";
 import SupDash from "@scenes/SupDash";
 import Site from "@scenes/Site";
 import Activate from "@scenes/ActivateSite";
@@ -279,6 +280,8 @@ import NotificationsPage from "@scenes/NotificationPage";
 import LandingPage from "@scenes/LandingPage";
 import DetailedAlert from "@scenes/DetailedAlert";
 import StatsSupervisor from "@scenes/StatsSupervisor";
+import Stats   from "@scenes/stats";
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -286,6 +289,7 @@ import "./App.css";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
+  
   const userId = useSelector((state) => state.global.userId);
   const UserType = useSelector((state) => state.global.type);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -300,7 +304,8 @@ function App() {
           <Route path="/forgot-password" element={<Forgot1 />} />
           <Route path="/recoverpassword/:id" element={<Forgot2 />} />
           <Route path="/stats" element={<StatsSupervisor />} />
-          <Route path="/home" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/login/:type" element={<Login />} />
 
           {/* Authenticated Routes */}
@@ -322,6 +327,8 @@ function App() {
                 <Route path="/detailAlerts/:id" element={<DetailedAlert />} />
                 <Route path="/listing/:siteId" element={<Listing />} />
                 <Route path="/dashboard/supervisor/mytasks" element={<NotesComponent />} />
+                <Route path="/dashboard/supervisor/stats" element={<StatsSupervisor />} />
+
 
                 <Route path="/dashboard/:type/admindashboard" element={<Navigate to="/dashboard/admin" replace />} />
                 <Route path="/dashboard/supervisor/dashboard" element={<Navigate to="/dashboard/supervisor" replace />} />
@@ -330,8 +337,10 @@ function App() {
                 <Route path="/dashboard/:type/weatherdetails" element={<Weather />} />
                 <Route path="/dashboard/:type/registersite" element={<RegisterSite />} />
                 <Route path="/dashboard/:type/updatesupervisor" element={<UpdateSupervisor />} />
+                <Route path="/dashboard/:type/statistics" element={<Stats />} />
                 <Route path="/dashboard/:type/updatesupervisor/editsupervisor/:id" element={<EditInfoForm />} />
-                <Route path="/dashboard/:type/getallsites" element={<Video />} />
+                {/* <Route path="/dashboard/:type/getallsites" element={<Video />} /> */}
+                <Route path="/dashboard/:type/getallsites" element={<GetAllsites />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/performance" element={<Performance />} />
               </Route>

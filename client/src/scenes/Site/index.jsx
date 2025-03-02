@@ -334,13 +334,214 @@
 
 // export default Site;
 
+// import { useState, useEffect } from "react";
+// import { Box, Typography, Card, CardContent, Select, MenuItem, TextField ,Button } from "@mui/material";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import { useDispatch, useSelector } from 'react-redux';
+
+// const Site= () => {
+//   const [allSites, setAllSites] = useState([]);
+//   const [filteredSites, setFilteredSites] = useState([]);
+//   const [filters, setFilters] = useState({
+//     SiteName: "",
+//     Active: "",
+//     Sensitivity: "",
+//   });
+//   const UserId = useSelector((state) => state.global.userId);
+
+//   const [SitenameCategory , setSitename] = useState([]);
+
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     axios.get(`http://localhost:5000/Site/myAll/${UserId}`).then((response) => {
+//       const sites = response.data.map((site) => ({
+//         SiteID: site._id,
+//         SiteName: site.SiteName,
+//         SiteAddress: site.SiteAddress,
+//         City: site.City,
+//         Sensitivity: site.Sensitivity || "Unknown",
+//         Active: site.Active,
+//       }));
+//       setAllSites(sites);
+//       setFilteredSites(sites);
+    
+//     });
+//   }, []);
+
+//   // Handle filter change
+//   const handleFilterChange = (e) => {
+//     const { name, value } = e.target;
+//     setFilters((prev) => ({ ...prev, [name]: value }));
+//   };
+
+//   // Apply filters
+//   useEffect(() => {
+//     let filtered = allSites;
+
+//     if (filters.SiteName) {
+//       filtered = filtered.filter((site) =>
+//         site.SiteName.toLowerCase().includes(filters.SiteName.toLowerCase())
+//       );
+//     }
+//     if (filters.Active) {
+//       filtered = filtered.filter((site) => String(site.Active) === filters.Active);
+//     }
+//     if (filters.Sensitivity) {
+//       filtered = filtered.filter((site) => site.Sensitivity === filters.Sensitivity);
+//     }
+
+//     setFilteredSites(filtered);
+//   }, [filters, allSites]);
+
+//   return (
+//     <Box
+//       sx={{
+//         minHeight: "100vh",
+//         bgcolor: "linear-gradient(to bottom, #F59E0B, #FDE68A, #FEF3C7)",
+//         p: 4,
+//         display: "flex",
+//         justifyContent: "center",
+//         alignItems: "center",
+//       }}
+//     >
+//       <Box
+//         sx={{
+//           p: 6,
+//           bgcolor: "rgba(255, 255, 255, 0.3)",
+//           borderRadius: 2,
+//           boxShadow: 3,
+//           backdropFilter: "blur(10px)",
+//           width: "100%",
+//           maxWidth: "1200px",
+//         }}
+//       >
+//         {/* Welcome Section */}
+//         <Box textAlign="center" mb={4}>
+//           <Typography variant="h4" fontWeight="bold" fontFamily="Poppins">
+//             Supervisor Sites
+//           </Typography>
+//           <Typography variant="h6" fontFamily="Dancing Script" color="text.secondary">
+//             Manage all your assigned sites and monitor their cameras here!
+//           </Typography>
+//         </Box>
+
+// {filteredSites.map((sites, index) => (
+// <Button
+// key={index}
+// // variant={selectedFilter === category ? "contained" : "outlined"}
+// // color="primary"
+// // sx={{
+// // color: selectedFilter === category ? "#fff" : "#000",
+// // bgcolor: selectedFilter === category ? "#00796b" : "transparent",
+// // borderColor: "#00796b",
+// // }}
+// sx={{
+//   color:  "#fff",
+//   bgcolor:  "#00796b" ,
+//   borderColor: "#00796b"
+//   }}
+//   name= "SiteName"
+
+//   onClick={handleFilterChange}
+
+// // onClick={() => setSelectedFilter(sites.SiteName)}
+// >
+// {sites.SiteName}
+// </Button>
+// ))}
+
+//         {/* Filters Section */}
+//         <Box display="flex" gap={2} mb={4}>
+//           <TextField
+//             label="Filter by Site Name"
+//             name="SiteName"
+//             variant="outlined"
+//             fullWidth
+//             value={filters.SiteName}
+//             onChange={handleFilterChange}
+//           />
+//           <Select
+//             name="Active"
+//             value={filters.Active}
+//             onChange={handleFilterChange}
+//             displayEmpty
+//             fullWidth
+//           >
+//             <MenuItem value="">Filter by Active</MenuItem>
+//             <MenuItem value="true">Active</MenuItem>
+//             <MenuItem value="false">Inactive</MenuItem>
+//           </Select>
+//           <Select
+//             name="Sensitivity"
+//             value={filters.Sensitivity}
+//             onChange={handleFilterChange}
+//             displayEmpty
+//             fullWidth
+//           >
+//             <MenuItem value="">Filter by Sensitivity</MenuItem>
+//             <MenuItem value="High">High</MenuItem>
+//             <MenuItem value="Medium">Medium</MenuItem>
+//             <MenuItem value="Low">Low</MenuItem>
+//             <MenuItem value="Unknown">Unknown</MenuItem>
+//           </Select>
+//         </Box>
+
+//         {/* Dynamic Sites Mapping */}
+//         {filteredSites.map((site) => (
+//           <Card
+//             key={site.SiteID}
+//             sx={{
+//               mb: 4,
+//               boxShadow: 3,
+//               borderRadius: 2,
+//               bgcolor: "rgba(255, 255, 255, 0.9)",
+//               backdropFilter: "blur(10px)",
+//               cursor: "pointer",
+//             }}
+//             onClick={() => navigate(`/listing/${site.SiteID}`)}
+//           >
+//             <Box>
+//               <div className="h-[550px]">
+//                 <img src={`http://localhost:8000/stream-video/${site.SiteName}.mp4`} alt={site.SiteName} />
+//               </div>
+//             </Box>
+
+//             <CardContent sx={{ bgcolor: "rgba(255, 255, 255, 0.9)", backdropFilter: "blur(5px)" }}>
+//               <Typography variant="h5" fontWeight="bold" color="black">
+//                 {site.SiteName}
+//               </Typography>
+//               <Typography variant="body1" color="black" mt={1}>
+//                 Address: {site.SiteAddress} | City: {site.City}
+//               </Typography>
+//               <Typography variant="h6" fontWeight="bold" color="black" mt={2}>
+//                 Sensitivity: {site.Sensitivity}
+//               </Typography>
+//               <Typography
+//                 variant="body1"
+//                 fontWeight="bold"
+//                 sx={{ color: site.Active ? "green" : "red" }}
+//               >
+//                 Status: {site.Active ? "Active" : "Inactive"}
+//               </Typography>
+//             </CardContent>
+//           </Card>
+//         ))}
+//       </Box>
+//     </Box>
+//   );
+// };
+
+// export default Site;
+
 import { useState, useEffect } from "react";
-import { Box, Typography, Card, CardContent, Select, MenuItem, TextField } from "@mui/material";
+import { Box, Typography, Card, CardContent, Select, MenuItem, Button } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const Site= () => {
+const Site = () => {
   const [allSites, setAllSites] = useState([]);
   const [filteredSites, setFilteredSites] = useState([]);
   const [filters, setFilters] = useState({
@@ -365,12 +566,17 @@ const Site= () => {
       setAllSites(sites);
       setFilteredSites(sites);
     });
-  }, []);
+  }, [UserId]);
 
   // Handle filter change
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle button click to filter by SiteName
+  const handleButtonClick = (siteName) => {
+    setFilters((prev) => ({ ...prev, SiteName: siteName }));
   };
 
   // Apply filters
@@ -424,16 +630,62 @@ const Site= () => {
           </Typography>
         </Box>
 
+        {/* Site Name Buttons */}
+
+        <Box
+        sx={{
+        display: "flex",
+        gap: 2,
+        overflowX: "auto",
+        mb: 3,
+        p: 2,
+        bgcolor: "#e0f2f1",
+        borderRadius: 2,
+        }}>
+        <Box display="flex" gap={2} mb={4} flexWrap="wrap">
+          {/* "All" Button */}
+          <Button
+            variant={filters.SiteName === "" ? "contained" : "outlined"}
+            color="primary"
+            sx={{
+              color: filters.SiteName === "" ? "#fff" : "#000",
+              bgcolor: filters.SiteName === "" ? "#00796b" : "transparent",
+              // color: filters.SiteName === "" ? "#fff" : ""#000",
+              // bgcolor: filters.SiteName === "" ? "#00796b" : "transparent",
+              borderColor: "#00796b",
+              "&:hover": {
+                bgcolor: filters.SiteName === "" ? "#00796b" : "#e0f2f1",
+              },
+            }}
+            onClick={() => handleButtonClick("")}
+          >
+            All
+          </Button>
+          </Box>
+
+          {/* Site Name Buttons */}
+          {allSites.map((site, index) => (
+            <Button
+              key={index}
+              variant={filters.SiteName === site.SiteName ? "contained" : "outlined"}
+              color="primary"
+              sx={{
+                color: filters.SiteName === site.SiteName ? "#fff" : "#00796b",
+                bgcolor: filters.SiteName === site.SiteName ? "#00796b" : "transparent",
+                borderColor: "#00796b",
+                "&:hover": {
+                  bgcolor: filters.SiteName === site.SiteName ? "#00796b" : "#e0f2f1",
+                },
+              }}
+              onClick={() => handleButtonClick(site.SiteName)}
+            >
+              {site.SiteName}
+            </Button>
+          ))}
+        </Box>
+
         {/* Filters Section */}
         <Box display="flex" gap={2} mb={4}>
-          <TextField
-            label="Filter by Site Name"
-            name="SiteName"
-            variant="outlined"
-            fullWidth
-            value={filters.SiteName}
-            onChange={handleFilterChange}
-          />
           <Select
             name="Active"
             value={filters.Active}

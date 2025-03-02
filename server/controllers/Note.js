@@ -3,8 +3,10 @@ import Note from '../models/Note.js';
 export const createNote = async (req, res) => {
   console.log("add hony wla aik note");
   console.log(req.body);
+
+  const {supervisorId} = req.params
   
-  const { supervisorId, title, content, priority, dueDate, isImportant } = req.body;
+  const {title, content, priority, dueDate, done , category } = req.body;
 
   
 
@@ -15,7 +17,8 @@ export const createNote = async (req, res) => {
       content,
       priority,
       dueDate,
-      isImportant,
+      category,
+      done,
     });
 
     await newNote.save();
@@ -65,16 +68,50 @@ export const checking = async(req,res)=>{
   console.log("dsadsadsa");
 }
 
+export const toggleDone= async (req, res) => {
+  const { noteId } = req.params;
+  try {
+    // Find the note by ID
+    const note = await Note.findById(noteId);
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: 'Note not found.',
+      });
+    }
+
+    // Toggle the `done` status
+    note.done = !note.done;
+
+    // Save the updated note
+    const updatedNote = await note.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Note marked as ${updatedNote.done ? 'done' : 'pending'}.`,
+      data: updatedNote,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error toggling note status.',
+    });
+  }
+};
+
 
 
 export const updateNote = async (req, res) => {
   const { noteId } = req.params;
-  const { title, content, priority, dueDate, isImportant } = req.body;
+  console.log(noteId + "yes we will update");
+  console.log(req.body)
+  const { title, content, priority, dueDate, done  } = req.body;
 
   try {
     const updatedNote = await Note.findByIdAndUpdate(
       noteId,
-      { title, content, priority, dueDate, isImportant },
+      { title, content, priority, dueDate, done  },
       { new: true }
     );
 
@@ -102,6 +139,7 @@ export const updateNote = async (req, res) => {
 
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params;
+  console.log("main del kru ga");
 
   try {
     const deletedNote = await Note.findByIdAndDelete(noteId);

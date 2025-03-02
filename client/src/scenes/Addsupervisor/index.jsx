@@ -4,6 +4,8 @@ import { useTheme } from "@mui/material/styles";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Addsupervisor = () => {
   const theme = useTheme();
@@ -110,7 +112,12 @@ const Addsupervisor = () => {
 
       const result = await response.json();
       if (response.ok) {
-        alert("Supervisor added successfully");
+       
+
+         toast.success("SuperVisor Added Successfull ✅", {
+            position: "top-right",
+            autoClose: 3000,
+            });
         // Reset form after submission
         setFormData({
           name: "",
@@ -125,10 +132,18 @@ const Addsupervisor = () => {
 
       } else {
         alert(result.message || "Error adding supervisor");
+        toast.info("Error occured please try again!", {
+          position: "top-right",
+          autoClose: 3000,
+          });
       }
     } catch (err) {
       console.error("Error submitting form:", err);
       setError("Error adding supervisor");
+      toast.error("Supervisor not Added ",{
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 

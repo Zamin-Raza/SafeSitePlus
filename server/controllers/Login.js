@@ -160,7 +160,7 @@ export const changedpass = async(req,res)=>{
       } else if (type === "admin") {
 
         user = await Admin_SafeSite.findOne({ email });
-        console.log(user); // Debugging log to ensure correct user is fetched
+        console.log("Email is user ki hai" , user); // Debugging log to ensure correct user is fetched
       } else {
         return res.status(400).json({
           message: "Invalid user type.",
@@ -177,6 +177,7 @@ export const changedpass = async(req,res)=>{
       if (type === "supervisor") {
         const isPassEqual = await bcrypt.compare(password, user.password);
         if (!isPassEqual) {
+          console.log("password wrong hy")
           return res.status(403).json({ message: errorMsg, success: false });
         }
       } else if (type === "admin") {

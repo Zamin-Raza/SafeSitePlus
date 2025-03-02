@@ -77,6 +77,18 @@ export const saveID = async(req,res)=>{
 
 }
 
+
+export const getAllincident = async (req, res) => {
+  try {
+    console.log("abhi ajain gy");
+    const anomalies = await AnomalyResponse.find().sort({ detectedAt: -1 }); // Latest first
+    res.status(200).json(anomalies);
+  } catch (error) {
+    console.error('Error fetching detected anomalies:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 export const sendEmailAlert = async (req,res) => {
   console.log("gg ye wala chal jaye ga");
   console.log(supervisorId + "ye id hy ");

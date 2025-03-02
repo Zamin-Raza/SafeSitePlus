@@ -10,18 +10,76 @@ const StatsSupervisor = () => {
     total: 0,
     active: 0,
     closed: 0,
-    notifications:0,
-    InProgress:0,
-    recentActivity: [], // Data for trends (optional)
+    // Data for trends (optional)
   })
  const UserId = useSelector((state) => state.global.userId);
 
+ const [notifications, setNotifications] = useState({
+  total: 0,
+  unSeen: 0,
+  Inprogress: 0,
+  Unresolved: 0,
+});
+
+const fetchNotifications = async () => {
+  try {
+    // Fetch all notifications
+    const response = await axios.get(`http://localhost:5000/alerts/detectedAnomalies`);
+    const allNotifications = response.data;
+
+    // Fetch all incidents
+    const incidentResponse = await axios.get(`http://localhost:5000/response/getAllincident`);
+    const allIncidents = incidentResponse.data;
+
+    // Map to count Inprogress and Unresolved incidents related to notifications
+    let unresolvedCount = 0;
+    let inprogressCount = 0;
+    let unseen= 0;
+
+    
+
+    allNotifications.forEach((notification) => {
+      if(!notification.seen){
+        unseen++
+      }
+
+      const relatedIncidents = allIncidents.filter(
+        (incident) => incident.anomalyId === notification._id
+      );
+     
+
+    
+
+      relatedIncidents.forEach((incident) => {
+        if (incident.status === "Unresolved") {
+          unresolvedCount++;
+        } else if (incident.status === "Inprogress") {
+          inprogressCount++;
+        }
+        
+      });
+    });
+
+    // Update state with the new counts
+    setNotifications({
+      total: allNotifications.length,
+      Inprogress: inprogressCount,
+      Unresolved: unresolvedCount,
+      unSeen: unseen
+    });
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+  }
+};
   
   useEffect(() => {
     const fetchSites = async () => {
       try {
+       
         const response = await axios.get(`http://localhost:5000/Site/myAll/${UserId}`); // Adjust your API endpoint
-        const myAllSites = response.data; // Assuming the API returns an array of supervisor objects
+        const myAllSites = response.data;
+        console.log(myAllSites) 
+        // Assuming the API returns an array of supervisor objects
   
         // Initialize supervisor data
         const updatedSupervisorData = {
@@ -34,7 +92,7 @@ const StatsSupervisor = () => {
   
         // Count active and suspended supervisors
         myAllSites.forEach((site) => {
-          if (site.status === 'active') {
+          if (site.Active) {
             updatedSupervisorData.active++;
           } else  {
             updatedSupervisorData.closed++;
@@ -49,6 +107,7 @@ const StatsSupervisor = () => {
     };
   
     fetchSites();
+    fetchNotifications();
   }, []);
 
   
@@ -122,8 +181,21 @@ const StatsSupervisor = () => {
     labels: ['Registered', 'Active', 'Closed'],
     datasets: [
       {
-        label: 'Supervisors Count',
+        label: 'Sites Count',
         data: [supervisorData.total, supervisorData.active, supervisorData.closed],
+        backgroundColor: ['#3f51b5', '#4caf50', '#f44336'], // Different colors for bars
+        borderColor: ['#303f9f', '#388e3c', '#d32f2f'],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const barChartData2 = {
+    labels: ['Total', 'Unresolved', 'Solved' ],
+    datasets: [
+      {
+        label: 'Sites Count',
+        data: [notifications.total, notifications.Inprogress, notifications.Unresolved],
         backgroundColor: ['#3f51b5', '#4caf50', '#f44336'], // Different colors for bars
         borderColor: ['#303f9f', '#388e3c', '#d32f2f'],
         borderWidth: 2,
@@ -136,7 +208,7 @@ const StatsSupervisor = () => {
     labels: ['Active', 'Closed'],
     datasets: [
       {
-        label: 'Supervisor Status',
+        label: 'Sites Status',
         data: [supervisorData.active, supervisorData.closed],
         backgroundColor: ['#4caf50', '#f44336'],
         hoverBackgroundColor: ['#66bb6a', '#e57373'],
@@ -147,12 +219,12 @@ const StatsSupervisor = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Admin Dashboard
+        Supervisor Dashboard
       </Typography>
       <Grid container spacing={3}>
         {/* Bar Chart for Supervisors Count */}
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Supervisors Count</Typography>
+          <Typography variant="h6">Sites Count</Typography>
           <Bar data={barChartData} />
         </Grid>
         {/* Pie Chart for Supervisors Status */}
@@ -168,6 +240,17 @@ const StatsSupervisor = () => {
         <Grid item xs={12} md={6}>
           <Typography variant="h6">Supervisors Status</Typography>
           <Doughnut data={Doughnutdata} />
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Typography variant="h6">Notifications Status</Typography>
+          <p>
+            {notifications.total} <br/>
+            InProgress : {notifications.Inprogress} <br/>
+            Unresolved : {notifications.Unresolved}<br/>
+            Unseen Notifications : {notifications.unSeen}
+          </p>
+          <Doughnut data={barChartData2} />
         </Grid>
 
         <Grid item xs={12} md={6}>

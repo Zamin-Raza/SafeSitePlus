@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Grid, Card, CardContent, Select , MenuItem } from '@mui/material';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 
 const RegisterSite = () => {
@@ -45,11 +49,19 @@ const RegisterSite = () => {
         const response = await axios.post('http://localhost:5000/Site/Register', {formData});
         const result= await response.json();
       if (result.ok) {
-        alert("Site added successfully")
+        toast.success("Supervisor Updated Successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          });
+        // alert("Site added successfully")
       }
         
       } catch (e) {
         console.error(e);
+        toast.error("Site not Added Successfully" ,e, {
+          position: "top-right",
+          autoClose: 3000,
+          });
       }
     
       console.log('Form submitted:', formData);

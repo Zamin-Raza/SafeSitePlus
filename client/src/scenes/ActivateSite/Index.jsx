@@ -3,6 +3,8 @@ import { Box, Typography, Card, CardContent, TextField, MenuItem, Button } from 
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Activate = () => {
   const [Mysites, setMysites] = useState([]);
@@ -59,6 +61,13 @@ const Activate = () => {
         // Update the local state with the new data
         const updatedSites = Mysites.map((site) =>
           site.SiteID === editableSite.SiteID ? { ...site, ...editableSite } : site
+        );
+        toast.success(
+          `Site Successfully ${editableSite.Active ? "Deactivated" : "Activated"}`, 
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
         );
         setMysites(updatedSites);
         setEditableSite(null); // Close the edit form

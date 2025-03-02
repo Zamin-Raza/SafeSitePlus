@@ -48,6 +48,8 @@ import {
   AllOutOutlined,
   ViewAgendaOutlined,
   EditLocation,
+  NoteAddOutlined,
+  AutoGraphOutlined,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@assets/profile.jpg";
@@ -108,7 +110,7 @@ const navItems = [
 
 
   {
-    text: "Stats",
+    text: "Statistics",
     icon: <ViewAgendaOutlined/>,
   },
  
@@ -171,6 +173,14 @@ const navItems2 = [
   {
     text: "SiteView",
     icon: <CameraEnhance />,
+  },
+  {
+    text: "Mytasks",
+    icon: <NoteAddOutlined/>,
+  },
+  {
+    text: "Stats",
+    icon: <AutoGraphOutlined/>,
   },
 
   {

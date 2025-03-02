@@ -5,6 +5,9 @@ import { BlockOutlined, DeleteForeverOutlined, EditAttributesOutlined } from '@m
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 
@@ -27,6 +30,10 @@ const UpdateSupervisor = () => {
       const response = await axios.put(`http://localhost:5000/supervisor/suspend/${id}`);
   
       if (response.status === 200) {
+        toast.success("Supervisor Account Suspended Successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          });
         console.log("Account suspended Successfully");
   
         // Update state to toggle status
@@ -48,6 +55,10 @@ const UpdateSupervisor = () => {
       }
     } catch (error) {
       console.error("Failed to suspend account:", error);
+      toast.error("Account not Suspended  ", {
+        position: "top-right",
+        autoClose: 3000,
+        });
     }
   };
   
@@ -75,12 +86,20 @@ const EditInfo = (id) => {
       if (response.ok) {
         setDatas((prevDatas) => prevDatas.filter((data) => data._id !== id));
         setFilteredDatas((prevFilteredDatas) => prevFilteredDatas.filter((data) => data._id !== id));
+        toast.success("Supervisor Deleted Successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          });
         console.log("Supervisor deleted successfully");
       } else {
         console.error("Failed to delete supervisor");
       }
     } catch (error) {
       console.error("An error occurred:", error);
+      toast.error("Supervisor Not Deleted ", {
+        position: "top-right",
+        autoClose: 3000,
+        });
     }
   };
 

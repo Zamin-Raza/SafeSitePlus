@@ -8,6 +8,9 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import {
   DownloadOutlined,
@@ -40,6 +43,10 @@ const AuditLogging = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Supervisors');
   
     XLSX.writeFile(workbook, 'supervisors.xlsx');
+    toast.success("Supervisor List  Excel downloaded!", {
+      position: "top-right",
+      autoClose: 3000,
+      });
   };
 
 
@@ -79,6 +86,10 @@ const downloadPDF = () => {
     ]),
   });
   doc.save('Supervisors List.pdf');
+  toast.success("Supervisor List  PDF downloaded!", {
+    position: "top-right",
+    autoClose: 3000,
+    });
 }
 
 

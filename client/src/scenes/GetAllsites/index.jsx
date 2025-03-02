@@ -9,6 +9,11 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
 import {
   DownloadOutlined,
   Email,
@@ -40,6 +45,10 @@ const GetAllsites = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Supervisors');
   
     XLSX.writeFile(workbook, 'supervisors.xlsx');
+    toast.success("Sites List Excel downloaded!", {
+      position: "top-right",
+      autoClose: 3000,
+      });
   };
 
 
@@ -75,6 +84,10 @@ const downloadPDF = () => {
     body: filteredDatas.map(data => [data.SiteID, data.SiteName , data.Sensitivity,data.monitored==true ? 'Assined' : 'Not Assigned']),
   });
   doc.save('My Sites.pdf');
+  toast.success("Sites List  PDF downloaded!", {
+    position: "top-right",
+    autoClose: 3000,
+    });
 };
 
 

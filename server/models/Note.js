@@ -24,10 +24,15 @@ const noteSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
-  isImportant: {
-    type: Boolean,
-    default: false,  // Whether the note is marked as important
-  },
+  category: {
+    type: String,
+    required: true
+},
+done: {
+  type: Boolean,
+  default: false
+},
+
 },{ timestamps: true } );
 
 const Note = mongoose.model('Note', noteSchema);

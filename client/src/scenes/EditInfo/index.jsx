@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTheme } from "@mui/material/styles";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditInfoForm = () => {
   const { id } = useParams();
@@ -100,7 +102,8 @@ const EditInfoForm = () => {
     try {
       // Update supervisor data
       await axios.put(`http://localhost:5000/supervisor/edit/${id}`, supervisor);
-      console.log('Supervisor updated successfully');
+      // console.log('Supervisor updated successfully');
+     
 
       // Update monitored status of newly assigned sites
       for (const siteId of supervisor.siteAssigned) {
@@ -108,9 +111,13 @@ const EditInfoForm = () => {
           monitored: true,
         });
       }
+      toast.success("Supervisor Updated Successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        });
 
       // Navigate back or show success message
-      navigate('/supervisors');
+      navigate('/dashboard/admin/updatesupervisor');
     } catch (error) {
       console.error('Error updating supervisor:', error);
     }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector } from "react-redux";
 import { signIn , setType } from "@state";
 // import { useNavigate } from "react-router-dom";
 import NewHeader from '../../components/NewHeader'; 
@@ -13,8 +13,12 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const {type} = useParams();
+  const mode = useSelector((state) => state.global.mode);
+  console.log(mode)
+ 
+
   // const type = 'supervisor'
-  console.log(type)
+ 
 
 
   
@@ -107,6 +111,7 @@ export default function Login() {
         setLoading(false);
         return;
       }
+      console.log(formData)
   
       // Define API endpoint
       const endpoint = `http://localhost:5000/login/${type}/verify`;
@@ -159,14 +164,14 @@ export default function Login() {
       <NewHeader/>
  
       
-      <div className="p-3 max-w-lg mx-auto">
+      {/* <div className="p-3 max-w-lg mx-auto">
         <h1 className="text-3xl text-center font-semibold my-7">Login</h1>
 
         <div className="flex flex-col gap-4">
           <input
             type="email"
             placeholder="Email*"
-            className="border p-3 rounded-lg hover:border-1 hover:border-[#FBB911] focus:border-1 focus:border-[#FBB911]"
+            className="border p-3 rounded-lg hover:border-1 hover:border-[#FBB911] focus:border-1 focus:border-[#FBB911] "
             id="email"
             value={formData.email}
             onChange={handleChange}
@@ -198,7 +203,52 @@ export default function Login() {
             </Link>
           </div>
         </div>
-      </div>
+      </div> */}
+      <div className="p-3 max-w-lg mx-auto">
+  <h1 className="text-3xl text-center font-semibold my-7 text-white dark:text-black">
+    Login
+  </h1>
+
+  <div className="flex flex-col gap-4">
+    <input
+      type="email"
+      placeholder="Email*"
+      className="border p-3 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white 
+                 hover:border-yellow-500 focus:border-yellow-500 outline-none transition-all"
+      id="email"
+      value={formData.email}
+      onChange={handleChange}
+    />
+    <input
+      type="password"
+      placeholder="Password*"
+      className="border p-3 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white 
+                 hover:border-yellow-500 focus:border-yellow-500 outline-none transition-all"
+      id="password"
+      value={formData.password}
+      onChange={handleChange}
+    />
+    {error && <p className="text-red-500 mt-2">{error}</p>}
+
+    <button
+      onClick={handleSubmit}
+      disabled={loading}
+      className="bg-yellow-500 text-white p-3 rounded-lg uppercase hover:bg-yellow-600 disabled:bg-yellow-300 transition-all"
+    >
+      {loading ? "Loading..." : "Login"}
+    </button>
+
+    <div className="mr-3 text-end">
+      <Link
+        to="/forgot-password"
+        className="text-gray-300 dark:text-gray-700 hover:underline font-medium"
+      >
+        Forgot Password?
+      </Link>
+    </div>
+  </div>
+</div>
+
     </div>
   );
 }
