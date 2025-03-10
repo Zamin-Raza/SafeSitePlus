@@ -50,6 +50,7 @@ import {
   EditLocation,
   NoteAddOutlined,
   AutoGraphOutlined,
+  ChatBubbleOutline,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@assets/profile.jpg";
@@ -181,6 +182,11 @@ const navItems2 = [
   {
     text: "Stats",
     icon: <AutoGraphOutlined/>,
+  },
+
+  {
+    text: "Chatbot",
+    icon: <ChatBubbleOutline/>,
   },
 
   {

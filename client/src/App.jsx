@@ -281,6 +281,8 @@ import LandingPage from "@scenes/LandingPage";
 import DetailedAlert from "@scenes/DetailedAlert";
 import StatsSupervisor from "@scenes/StatsSupervisor";
 import Stats   from "@scenes/stats";
+import Chatbot   from "@scenes/Chatbot";
+import VideoStream  from "@scenes/checkvideo";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -303,7 +305,8 @@ function App() {
           {/* Public Routes */}
           <Route path="/forgot-password" element={<Forgot1 />} />
           <Route path="/recoverpassword/:id" element={<Forgot2 />} />
-          <Route path="/stats" element={<StatsSupervisor />} />
+          <Route path="/Videos" element={<VideoStream />} />
+          {/* <Route path="/stats" element={<StatsSupervisor />} /> */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<Navigate to="/" replace />} />
           <Route path="/login/:type" element={<Login />} />
@@ -328,6 +331,7 @@ function App() {
                 <Route path="/listing/:siteId" element={<Listing />} />
                 <Route path="/dashboard/supervisor/mytasks" element={<NotesComponent />} />
                 <Route path="/dashboard/supervisor/stats" element={<StatsSupervisor />} />
+                <Route path="/dashboard/supervisor/chatbot" element={<Chatbot/>} />
 
 
                 <Route path="/dashboard/:type/admindashboard" element={<Navigate to="/dashboard/admin" replace />} />
