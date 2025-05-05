@@ -92,10 +92,6 @@ const downloadPDF = () => {
     });
 }
 
-
-
-
-
   const columns = [
     {
       field: 'name',

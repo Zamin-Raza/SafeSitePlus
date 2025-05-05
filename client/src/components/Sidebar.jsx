@@ -51,6 +51,7 @@ import {
   NoteAddOutlined,
   AutoGraphOutlined,
   ChatBubbleOutline,
+  AccessAlarm,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import profileImage from "@assets/profile.jpg";
@@ -168,6 +169,10 @@ const navItems2 = [
     icon: <GroupAddOutlined />,
   },
   {
+    text: "Forecasting",
+    icon: <AccessAlarm  />,
+  },
+  {
     text: "Reports",
     icon: <Details/>,
   },
@@ -201,6 +206,21 @@ const navItems2 = [
   
   {
     text: "WeatherDetails",
+    icon: <ReceiptLongOutlined />,
+  },
+
+  {
+    text: "ReportPage",
+    icon: <ReceiptLongOutlined />,
+  },
+
+  {
+    text: "Graphical",
+    icon: <ReceiptLongOutlined />,
+  },
+
+  {
+    text: "ReportPage2",
     icon: <ReceiptLongOutlined />,
   },
 

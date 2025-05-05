@@ -283,11 +283,15 @@ import StatsSupervisor from "@scenes/StatsSupervisor";
 import Stats   from "@scenes/stats";
 import Chatbot   from "@scenes/Chatbot";
 import VideoStream  from "@scenes/checkvideo";
+import Forecasting from "@scenes/Forecasting"
+import ReportPage from "@scenes/ReportPage";
+import ReportPage2 from "@scenes/ReportPage2";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import "./App.css";
+import Graphical from "@scenes/Graphical";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -332,6 +336,10 @@ function App() {
                 <Route path="/dashboard/supervisor/mytasks" element={<NotesComponent />} />
                 <Route path="/dashboard/supervisor/stats" element={<StatsSupervisor />} />
                 <Route path="/dashboard/supervisor/chatbot" element={<Chatbot/>} />
+                <Route path="/dashboard/supervisor/forecasting" element={<Forecasting/>} />
+                <Route path="/dashboard/supervisor/reportpage" element={<ReportPage/>} />
+                <Route path="/dashboard/supervisor/graphical" element={<Graphical/>} />
+                <Route path="/dashboard/supervisor/reportpage2" element={<ReportPage2/>} />
 
 
                 <Route path="/dashboard/:type/admindashboard" element={<Navigate to="/dashboard/admin" replace />} />
