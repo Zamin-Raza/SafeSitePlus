@@ -106,13 +106,6 @@ const Stats = () => {
       ],
     };
 
-  
-  
-
-
-  
-  
-
   // Prepare data for Bar Chart
   const barChartData = {
     labels: ['Registered', 'Active', 'Suspended'],
