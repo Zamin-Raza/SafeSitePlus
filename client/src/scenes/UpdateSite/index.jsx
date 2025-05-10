@@ -148,11 +148,11 @@
 //   );
 // }
 
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FiAlertTriangle, FiUserCheck } from 'react-icons/fi';
-import axios from 'axios';
-import { useDispatch , useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiAlertTriangle, FiUserCheck } from "react-icons/fi";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function UpdateSite() {
   const navigate = useNavigate();
@@ -160,28 +160,25 @@ export default function UpdateSite() {
     anomalies: {
       Hardhat: false,
       SafetyVests: false,
-      max_persons: 0,
       gloves: false,
       safetyBoots: false,
       faceShield: false,
       otherPPE: false,
+      enable_max_persons: false, // New checkbox
+      max_persons: 0,
     },
   });
-  const [selectedSite, setSelectedSite] = useState('');
-  const [error, setError] = useState('');
+  const [selectedSite, setSelectedSite] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [Mysites, setMysites] = useState([]);
 
-  // const UserId = '675c24c6d8670f67b459203c'; // Example UserId
-  const UserId  = useSelector((state) => state.global.userId);
+  const UserId = useSelector((state) => state.global.userId);
 
-  // Fetch sites
   const fetchYourSites = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/Site/myAll/${UserId}`);
       const allSites = response.data;
-
-      // Transform the response data
       const updatedSiteData = allSites.map((site) => ({
         SiteID: site._id,
         SiteName: site.SiteName,
@@ -193,7 +190,7 @@ export default function UpdateSite() {
 
       setMysites(updatedSiteData);
     } catch (error) {
-      console.error('Error fetching site data:', error);
+      console.error("Error fetching site data:", error);
     }
   };
 
@@ -208,7 +205,7 @@ export default function UpdateSite() {
       ...prev,
       anomalies: {
         ...prev.anomalies,
-        [id]: type === 'checkbox' ? checked : parseInt(value, 10),
+        [id]: type === "checkbox" ? checked : Math.max(0, parseInt(value, 10)), // Ensure min value is 0
       },
     }));
   };
@@ -220,19 +217,19 @@ export default function UpdateSite() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     if (!selectedSite) {
-      setError('Please select a site.');
+      setError("Please select a site.");
       setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch('http://localhost:5000/Anomaly_Details/SetAnoamly', {
-        method: 'PUT',
+      const res = await fetch("http://localhost:5000/Anomaly_Details/SetAnoamly", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           siteId: selectedSite,
@@ -248,14 +245,16 @@ export default function UpdateSite() {
         navigate(`/dashboard/supervisor/anomalyparameters`);
       }
     } catch (err) {
-      setError('Error updating site.');
+      setError("Error updating site.");
       setLoading(false);
     }
   };
 
   return (
     <main className="p-5 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-6">Update Site Anomalies</h1>
+      <h1 className="text-3xl font-semibold text-center my-6">
+        Update Site Anomalies
+      </h1>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         <label htmlFor="site-dropdown" className="text-xl font-semibold">
           Select Site:
@@ -264,13 +263,13 @@ export default function UpdateSite() {
           id="site-dropdown"
           value={selectedSite}
           onChange={handleSiteSelection}
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border rounded-lg text-black"
         >
-          <option value="" disabled>
+          <option value="" disabled className="text-black">
             Choose a Site
           </option>
           {Mysites.map((site) => (
-            <option key={site.SiteID} value={site.SiteID}>
+            <option key={site.SiteID} value={site.SiteID} className="text-black">
               {site.SiteName}
             </option>
           ))}
@@ -281,24 +280,61 @@ export default function UpdateSite() {
             <h3 className="text-xl font-semibold mt-6">Anomalies to Detect:</h3>
             <div className="border p-4 rounded-lg">
               <div className="flex flex-wrap gap-6">
-                {Object.keys(formData.anomalies).map((anomaly) => (
-                  <div className="flex items-center gap-2 w-1/4" key={anomaly}>
-                    <input
-                      type={anomaly === 'max_persons' ? 'number' : 'checkbox'}
-                      id={anomaly}
-                      className="w-5 h-6"
-                      onChange={handleChange}
-                      checked={formData.anomalies[anomaly]}
-                      value={formData.anomalies[anomaly]}
-                    />
-                    {anomaly === 'max_persons' ? (
-                      <FiUserCheck className="text-blue-700" />
-                    ) : (
+                {/* Render Checkboxes First */}
+                {Object.keys(formData.anomalies)
+                  .filter(
+                    (anomaly) => anomaly !== "max_persons" && anomaly !== "enable_max_persons"
+                  )
+                  .map((anomaly) => (
+                    <div className="flex items-center gap-2 w-1/4" key={anomaly}>
+                      <input
+                        type="checkbox"
+                        id={anomaly}
+                        className="w-6 h-6 rounded-md border-2 border-gray-400 focus:ring-2 focus:ring-blue-500"
+                        onChange={handleChange}
+                        checked={formData.anomalies[anomaly]}
+                      />
                       <FiAlertTriangle className="text-red-600" />
-                    )}
-                    <span>{anomaly.replace(/([A-Z])/g, ' $1')}</span>
+                      <span>{anomaly.replace(/([A-Z])/g, " $1")}</span>
+                    </div>
+                  ))}
+
+                {/* Enable Max Persons Detection Checkbox */}
+                <div className="w-full">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="enable_max_persons"
+                      className="w-6 h-6 rounded-md border-2 border-gray-400 focus:ring-2 focus:ring-blue-500"
+                      onChange={handleChange}
+                      checked={formData.anomalies.enable_max_persons}
+                    />
+                    <FiAlertTriangle className="text-red-600" />
+                    <span>Enable Max Persons Detection</span>
                   </div>
-                ))}
+                </div>
+
+                {/* Show max_persons input only if the checkbox is checked */}
+                {formData.anomalies.enable_max_persons && (
+                  <div className="w-full mt-4">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <FiUserCheck className="text-blue-700" />
+                      Select Max Persons you want to detect:
+                    </h3>
+                    <div className="flex items-center gap-2 mt-2">
+                      <input
+                        type="number"
+                        id="max_persons"
+                        min="0"
+                        className="w-14 h-8 p-2 text-lg border rounded bg-white text-black dark:bg-gray-700 dark:text-black appearance-none"
+                        onChange={handleChange}
+                        value={formData.anomalies.max_persons}
+                      />
+                      <FiUserCheck className="text-blue-700" />
+                      <span>Select Max Persons</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </>
@@ -309,10 +345,11 @@ export default function UpdateSite() {
           className="w-full py-3 mt-6 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg"
           disabled={loading}
         >
-          {loading ? 'Updating...' : 'Update Anomalies'}
+          {loading ? "Updating..." : "Update Anomalies"}
         </button>
         {error && <p className="text-red-600 text-center mt-4">{error}</p>}
       </form>
     </main>
   );
 }
+
